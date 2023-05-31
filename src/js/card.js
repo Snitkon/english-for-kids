@@ -7,7 +7,7 @@ class Cards {
 
   crateMainCard() {
     const main = document.querySelector('main')
-    const container = document.querySelector('div')
+    const section = document.querySelector('section')
     const wrapper = document.createElement('div')
     const card = document.createElement('div')
     const cover = document.createElement('div')
@@ -16,7 +16,7 @@ class Cards {
     const quantityWords = document.createElement('p')
     const indicator = document.createElement('div')
 
-    container.classList.add('container')
+    section.classList.add('section')
     wrapper.classList.add('card-wrapper')
     card.classList.add('card')
     cover.classList.add('card__cover')
@@ -29,8 +29,8 @@ class Cards {
     cardTitle.innerText = this.category
     quantityWords.innerText = this.words.length
 
-    main.appendChild(container)
-    container.appendChild(wrapper)
+    main.appendChild(section)
+    section.appendChild(wrapper)
 
     wrapper.appendChild(card)
 
