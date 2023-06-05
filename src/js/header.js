@@ -12,6 +12,8 @@ async function createHeader() {
   const nav = document.createElement('nav')
   const nav_list = document.createElement('ul')
   const switcher = document.createElement('div')
+  const input = document.createElement('input')
+  const label = document.createElement('label')
   const title = document.createElement('h1')
   const shadow = document.createElement('div')
 
@@ -23,10 +25,43 @@ async function createHeader() {
   nav_list.classList.add('nav__list')
   burger.classList.add('menu__burger')
   line.classList.add('line')
-  switcher.classList.add('switcher')
+  switcher.classList.add('switcher', 'form-check', 'form-switch')
+  input.classList.add('input', 'form-check-input')
+  label.classList.add('label', 'form-check-label')
   shadow.classList.add('shadow')
+  title.textContent = 'Train & Play'
+  label.textContent = 'Train'
 
-  title.innerText = 'Train & Play'
+  function setAttributes(el, options) {
+    Object.keys(options).forEach(function (attr) {
+      el.setAttribute(attr, options[attr])
+    })
+  }
+
+  setAttributes(input, {
+    type: 'checkbox',
+    id: 'flexSwitchCheckChecked',
+  })
+
+  label.setAttribute('for', 'flexSwitchCheckChecked')
+
+  switcher.addEventListener('click', (e) => {
+    input.toggleAttribute('checked')
+    const cardIndicator = document.querySelectorAll('.info_block__indicator')
+    if (input.checked) {
+      label.textContent = 'Play'
+      cardIndicator.forEach((item) => item.classList.add('play_mode'))
+      nav.classList.add('play_mode')
+      line.classList.add('play_mode')
+      burger.classList.add('play_mode')
+    } else {
+      label.textContent = 'Train'
+      cardIndicator.forEach((item) => item.classList.remove('play_mode'))
+      nav.classList.remove('play_mode')
+      line.classList.remove('play_mode')
+      burger.classList.remove('play_mode')
+    }
+  })
 
   body.appendChild(header)
   body.appendChild(shadow)
@@ -39,6 +74,9 @@ async function createHeader() {
 
   menu.appendChild(nav)
   menu.appendChild(burger)
+
+  switcher.appendChild(input)
+  switcher.appendChild(label)
 
   nav.appendChild(nav_list)
 

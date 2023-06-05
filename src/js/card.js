@@ -1,14 +1,13 @@
-class Cards {
-  constructor(category, cover, words) {
-    this.category = category
-    this.cover = cover
+class Card {
+  constructor(name, image, words, id) {
+    this.name = name
+    this.image = image
     this.words = words
+    this.id = id
   }
 
-  crateMainCard() {
-    const main = document.querySelector('main')
+  buildCardContainer() {
     const section = document.querySelector('section')
-    const wrapper = document.createElement('div')
     const card = document.createElement('div')
     const cover = document.createElement('div')
     const infoContainer = document.createElement('div')
@@ -17,22 +16,16 @@ class Cards {
     const indicator = document.createElement('div')
 
     section.classList.add('section')
-    wrapper.classList.add('card-wrapper')
     card.classList.add('card')
     cover.classList.add('card__cover')
-    cover.style.backgroundImage = `url('${this.cover}')`
     infoContainer.classList.add('card__info_block')
     cardTitle.classList.add('info_block__title')
     quantityWords.classList.add('info_block__quantity')
     indicator.classList.add('info_block__indicator')
-    card.setAttribute('name', this.category)
-    cardTitle.innerText = this.category
-    quantityWords.innerText = this.words.length
 
-    main.appendChild(section)
-    section.appendChild(wrapper)
+    card.setAttribute('id', this.id)
 
-    wrapper.appendChild(card)
+    section.appendChild(card)
 
     card.appendChild(cover)
 
@@ -41,6 +34,18 @@ class Cards {
     infoContainer.appendChild(quantityWords)
     infoContainer.appendChild(indicator)
   }
+
+  renderCard() {
+    const card = document.getElementById(this.id)
+    card.setAttribute('name', this.name)
+    const cover = card.querySelector('.card__cover')
+    const cardTitle = card.querySelector('.info_block__title')
+    // const quantityWords = card.querySelector('.info_block__quantity')
+
+    cover.style.backgroundImage = `url('${this.image}')`
+    cardTitle.innerText = this.name
+    // quantityWords.innerText = this.words.length
+  }
 }
 
-export default Cards
+export default Card

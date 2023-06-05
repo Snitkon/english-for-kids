@@ -322,5 +322,113 @@
         "audioSrc": "audio/laugh.mp3"
       }
     ]
+  },
+  {
+    "category": "Action (set A)",
+    "cover": "./assets/img/fish.jpg",
+    "words": [
+      {
+        "word": "cry",
+        "translation": "плакать",
+        "image": "assets/img/cry.jpg",
+        "audioSrc": "audio/cry.mp3"
+      },
+      {
+        "word": "dance",
+        "translation": "танцевать",
+        "image": "assets/img/dance.jpg",
+        "audioSrc": "audio/dance.mp3"
+      },
+      {
+        "word": "dive",
+        "translation": "нырять",
+        "image": "assets/img/dive.jpg",
+        "audioSrc": "audio/dive.mp3"
+      },
+      {
+        "word": "draw",
+        "translation": "рисовать",
+        "image": "assets/img/draw.jpg",
+        "audioSrc": "audio/draw.mp3"
+      },
+      {
+        "word": "fish",
+        "translation": "ловить рыбу",
+        "image": "assets/img/fish.jpg",
+        "audioSrc": "audio/fish.mp3"
+      },
+      {
+        "word": "fly",
+        "translation": "летать",
+        "image": "assets/img/fly.jpg",
+        "audioSrc": "audio/fly.mp3"
+      },
+      {
+        "word": "hug",
+        "translation": "обнимать",
+        "image": "assets/img/hug.jpg",
+        "audioSrc": "audio/hug.mp3"
+      },
+      {
+        "word": "jump",
+        "translation": "прыгать",
+        "image": "assets/img/jump.jpg",
+        "audioSrc": "audio/jump.mp3"
+      }
+    ]
+  },
+  {
+    "category": "Clothes",
+    "cover": "./assets/img/coat.jpg",
+    "words": [
+      {
+        "word": "skirt",
+        "translation": "юбка",
+        "image": "assets/img/skirt.jpg",
+        "audioSrc": "audio/skirt.mp3"
+      },
+      {
+        "word": "pants",
+        "translation": "брюки",
+        "image": "assets/img/pants.jpg",
+        "audioSrc": "audio/pants.mp3"
+      },
+      {
+        "word": "blouse",
+        "translation": "блузка",
+        "image": "assets/img/blouse.jpg",
+        "audioSrc": "audio/blouse.mp3"
+      },
+      {
+        "word": "dress",
+        "translation": "платье",
+        "image": "assets/img/dress.jpg",
+        "audioSrc": "audio/dress.mp3"
+      },
+      {
+        "word": "boot",
+        "translation": "ботинок",
+        "image": "assets/img/boot.jpg",
+        "audioSrc": "audio/boot.mp3"
+      },
+      {
+        "word": "shirt",
+        "translation": "рубашка",
+        "image": "assets/img/shirt.jpg",
+        "audioSrc": "audio/shirt.mp3"
+      },
+      {
+        "word": "coat",
+        "translation": "пальто",
+        "image": "assets/img/coat.jpg",
+        "audioSrc": "audio/coat.mp3"
+      },
+      {
+        "word": "shoe",
+        "translation": "туфли",
+        "image": "assets/img/shoe.jpg",
+        "audioSrc": "audio/shoe.mp3"
+      }
+    ]
   }
 ]

@@ -1,5 +1,5 @@
 h1 {
-  font-family: $font-title;
+  // font-family: $font-title;
   color: $color-play;
 }
 
@@ -50,6 +50,10 @@ body {
         transition: left 0.5s ease 0s;
         z-index: 5;
 
+        &.play_mode {
+          background-color: $color-play;
+        }
+
         &._active {
           left: 0;
         }
@@ -65,11 +69,12 @@ body {
             }
 
             .nav_list__link {
+              // font-family: $font-title;
               font-size: 24px;
-              font-family: $font-title;
-              color: $color-play;
+              color: white;
               font-weight: 900;
               cursor: pointer;
+              text-decoration: none;
             }
           }
         }
@@ -89,9 +94,20 @@ body {
           width: 100%;
           height: 10%;
           position: absolute;
-          background-color: red;
+          background-color: $color-play;
           left: 0;
           transition: all 0.5s ease 0s;
+        }
+
+        .play_mode {
+          background-color: $color-train;
+        }
+
+        &.play_mode {
+          &::after,
+          &::before {
+            background-color: $color-train;
+          }
         }
 
         &::before,
@@ -115,6 +131,29 @@ body {
     }
 
     .switcher {
+      width: 100px;
+      display: flex;
+      justify-content: center;
+      .input {
+        width: 50px;
+      }
+      .input::before {
+        width: 50px;
+        height: 20px;
+        background-color: $color-train;
+        transition: background 0.5s;
+      }
+      .input:checked::before {
+        background-color: $color-play;
+      }
+
+      .input::after {
+        width: 15px;
+        height: 15px;
+      }
+      .input:checked::after {
+        left: 30px;
+      }
     }
   }
 }
