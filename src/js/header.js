@@ -1,4 +1,6 @@
+import Card from './card'
 import getWords from './data'
+import SubCards from './subCard'
 
 async function createHeader() {
   const words = await getWords()
@@ -11,6 +13,8 @@ async function createHeader() {
   const line = document.createElement('span')
   const nav = document.createElement('nav')
   const nav_list = document.createElement('ul')
+  const first_main_item = document.createElement('li')
+  const first_link = document.createElement('a')
   const switcher = document.createElement('div')
   const input = document.createElement('input')
   const label = document.createElement('label')
@@ -23,6 +27,8 @@ async function createHeader() {
   menu.classList.add('menu')
   nav.classList.add('menu__nav')
   nav_list.classList.add('nav__list')
+  first_main_item.classList.add('nav_list__item')
+  first_link.classList.add('nav_list__link')
   burger.classList.add('menu__burger')
   line.classList.add('line')
   switcher.classList.add('switcher', 'form-check', 'form-switch')
@@ -31,6 +37,7 @@ async function createHeader() {
   shadow.classList.add('shadow')
   title.textContent = 'Train & Play'
   label.textContent = 'Train'
+  first_link.textContent = 'Main Page'
 
   function setAttributes(el, options) {
     Object.keys(options).forEach(function (attr) {
@@ -80,6 +87,9 @@ async function createHeader() {
 
   nav.appendChild(nav_list)
 
+  nav_list.appendChild(first_main_item)
+  first_main_item.appendChild(first_link)
+
   burger.appendChild(line)
 
   words.forEach((word) => {
@@ -99,6 +109,35 @@ async function createHeader() {
     nav.classList.toggle('_active')
     body.classList.toggle('_active')
     shadow.classList.toggle('_active')
+  })
+
+  nav_list.addEventListener('click', (e) => {
+    const parentName = e.target.parentElement.getAttribute('name')
+    const parentClass =
+      e.target.parentElement.classList.contains('nav_list__item')
+    if (parentName && parentClass) {
+      const card = words.find((item) => item.category === parentName)
+      const subWords = card.words
+      subWords.forEach((subWord, subId) => {
+        const { word, translation, image, audioSrc } = subWord
+        const subCards = new SubCards(word, image, translation, audioSrc, subId)
+        subCards.renderCard()
+        burger.classList.remove('_active')
+        nav.classList.remove('_active')
+        body.classList.remove('_active')
+        shadow.classList.remove('_active')
+      })
+    } else if (parentClass) {
+      words.forEach((word, id) => {
+        const { category, cover, words } = word
+        const cards = new Card(category, cover, words, id)
+        cards.renderCard()
+        burger.classList.remove('_active')
+        nav.classList.remove('_active')
+        body.classList.remove('_active')
+        shadow.classList.remove('_active')
+      })
+    }
   })
 }
 
