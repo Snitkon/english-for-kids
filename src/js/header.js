@@ -1,9 +1,11 @@
-import Card from './card'
-import getWords from './data'
-import SubCards from './subCard'
+import { Card } from './card'
+import getCards from './data'
+import { active, createCard, createSubCard } from './function'
+import { playCard, rotateCard } from './main'
+// import SubCards from './subCard'
 
 async function createHeader() {
-  const words = await getWords()
+  const cards = await getCards()
 
   const body = document.body
   const header = document.createElement('header')
@@ -38,6 +40,9 @@ async function createHeader() {
   title.textContent = 'Train & Play'
   label.textContent = 'Train'
   first_link.textContent = 'Main Page'
+
+  first_main_item.setAttribute('name', 'Main Page')
+
 
   function setAttributes(el, options) {
     Object.keys(options).forEach(function (attr) {
@@ -92,8 +97,23 @@ async function createHeader() {
 
   burger.appendChild(line)
 
-  words.forEach((word) => {
-    const { category } = word
+/*   for (let card of cards) {
+    const { category } = card
+    const nav_list__item = document.createElement('li')
+    const link = document.createElement('a')
+    nav_list__item.appendChild(link)
+    nav_list.appendChild(nav_list__item)
+    link.classList.add('nav_list__link')
+    nav_list__item.classList.add('nav_list__item')
+    nav_list__item.setAttribute('id', '1')
+    nav_list__item.setAttribute('name', `${category}`)
+    link.textContent = `${category}`
+  } */
+
+
+
+  cards.forEach((card, i) => {
+    const { category } = card
     const nav_list__item = document.createElement('li')
     const link = document.createElement('a')
     nav_list__item.appendChild(link)
@@ -101,6 +121,7 @@ async function createHeader() {
     link.classList.add('nav_list__link')
     nav_list__item.classList.add('nav_list__item')
     nav_list__item.setAttribute('name', `${category}`)
+    nav_list__item.setAttribute('data-id', i)
     link.textContent = `${category}`
   })
 
@@ -113,30 +134,27 @@ async function createHeader() {
 
   nav_list.addEventListener('click', (e) => {
     const parentName = e.target.parentElement.getAttribute('name')
+    const parentId = e.target.parentElement.getAttribute('data-id')
     const parentClass =
       e.target.parentElement.classList.contains('nav_list__item')
-    if (parentName && parentClass) {
-      const card = words.find((item) => item.category === parentName)
-      const subWords = card.words
-      subWords.forEach((subWord, subId) => {
-        const { word, translation, image, audioSrc } = subWord
-        const subCards = new SubCards(word, image, translation, audioSrc, subId)
-        subCards.renderCard()
-        burger.classList.remove('_active')
-        nav.classList.remove('_active')
-        body.classList.remove('_active')
-        shadow.classList.remove('_active')
-      })
-    } else if (parentClass) {
-      words.forEach((word, id) => {
-        const { category, cover, words } = word
-        const cards = new Card(category, cover, words, id)
-        cards.renderCard()
-        burger.classList.remove('_active')
-        nav.classList.remove('_active')
-        body.classList.remove('_active')
-        shadow.classList.remove('_active')
-      })
+    if (parentName != "Main Page" && parentClass) {
+      const card = cards.find((item) => item.category === parentName)
+      const subCards = card.words
+      createSubCard(subCards)
+      playCard(parentId)
+      rotateCard(parentId)
+      burger.classList.remove('_active')
+      nav.classList.remove('_active')
+      body.classList.remove('_active')
+      shadow.classList.remove('_active')
+      active(parentName, '.nav_list__item')
+    } else if (parentName === 'Main Page' && parentClass) {
+      createCard(cards)
+      burger.classList.remove('_active')
+      nav.classList.remove('_active')
+      body.classList.remove('_active')
+      shadow.classList.remove('_active')
+      active(parentName, '.nav_list__item')
     }
   })
 }

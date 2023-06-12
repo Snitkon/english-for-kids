@@ -1,7 +1,7 @@
-async function getWords() {
+async function getCards() {
   const response = await fetch('./assets/words-cards.json')
-  let words = await response.json()
-  return words
+  let cards = await response.json()
+  return cards
 }
 
-export default getWords
+export default getCards

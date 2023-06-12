@@ -75,6 +75,11 @@ body {
               font-weight: 900;
               cursor: pointer;
               text-decoration: none;
+
+              &._active {
+                color: red;
+                
+              }
             }
           }
         }
