@@ -10,7 +10,6 @@ export class Card {
     const cover = document.createElement('div')
     const infoContainer = document.createElement('div')
     const cardTitle = document.createElement('h2')
-    const rotate = document.del
     const indicator = document.createElement('div')
 
     section.classList.add('section')
@@ -56,11 +55,22 @@ class RenderCard {
 
     const infoContainer = card.querySelector('.card__info_block')
     const cover = card.querySelector('.card__cover')
-    const cardTitle = card.querySelector('.info_block__title')
+    // const cardTitle = card.querySelector('.info_block__title')
     const rotate = card.querySelector('.rotate')
 
+    if (card.querySelector('.info_block__subtitle')) {
+      const cardTitle = card.querySelector('.info_block__subtitle')
+      cardTitle.className = 'info_block__title'
+      cardTitle.innerText = this.cardData.category
+    }
+    if (card.querySelector('.info_block__title')) {
+      const cardTitle = card.querySelector('.info_block__title')
+      cardTitle.className = 'info_block__title'
+      cardTitle.innerText = this.cardData.category
+    }
+
     cover.style.backgroundImage = `url('${this.cardData.cover}')`
-    cardTitle.innerText = this.cardData.category
+    // cardTitle.innerText = this.cardData.category
     if (quantityWords === null) {
       const createQuantityWords = document.createElement('p')
       createQuantityWords.classList.add('info_block__quantity')
@@ -87,17 +97,29 @@ class RenderSubCard {
 
     const infoContainer = card.querySelector('.card__info_block')
     const cover = card.querySelector('.card__cover')
-    const cardTitle = card.querySelector('.info_block__title')
+    // const cardTitle = card.querySelector('.info_block__title')
     const quantityWords = card.querySelector('.info_block__quantity')
 
+    if (card.querySelector('.info_block__title')) {
+      const cardTitle = card.querySelector('.info_block__title')
+      cardTitle.className = 'info_block__subtitle'
+      cardTitle.innerText = this.cardData.word
+    }
+    if (card.querySelector('.info_block__subtitle')) {
+      const cardTitle = card.querySelector('.info_block__subtitle')
+      cardTitle.className = 'info_block__subtitle'
+      cardTitle.innerText = this.cardData.word
+    }
+    
+    // cardTitle.innerText = this.cardData.word
     cover.style.backgroundImage = `url('${this.cardData.image}')`
-    cardTitle.innerText = this.cardData.word
     if (rotate === null) {
       const createRotate = document.createElement('img')
       createRotate.classList.add('rotate')
       createRotate.setAttribute('src', './assets/img/rotate.svg')
       infoContainer.appendChild(createRotate)
     }
+
     quantityWords && infoContainer.removeChild(quantityWords)
   }
 }

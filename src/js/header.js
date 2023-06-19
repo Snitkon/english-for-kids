@@ -1,8 +1,7 @@
 import { Card } from './card'
 import getCards from './data'
 import { active, createCard, createSubCard } from './function'
-import { playCard, rotateCard } from './main'
-// import SubCards from './subCard'
+import { btn, playCard, renderSubCard, rotateCard } from './main'
 
 async function createHeader() {
   const cards = await getCards()
@@ -43,7 +42,6 @@ async function createHeader() {
 
   first_main_item.setAttribute('name', 'Main Page')
 
-
   function setAttributes(el, options) {
     Object.keys(options).forEach(function (attr) {
       el.setAttribute(attr, options[attr])
@@ -59,19 +57,34 @@ async function createHeader() {
 
   switcher.addEventListener('click', (e) => {
     input.toggleAttribute('checked')
+    const subCard = document.querySelectorAll('.subCard')
     const cardIndicator = document.querySelectorAll('.info_block__indicator')
+    const cardTitle = document.querySelectorAll('.info_block__subtitle')
+    const cardRotate = document.querySelectorAll('.rotate')
+    const start_btn = document.querySelector('.start_btn')
+    const repeat_btn = document.querySelector('.repeat_btn')
+
     if (input.checked) {
       label.textContent = 'Play'
+      subCard.forEach((item) => item.classList.add('play_mode'))
       cardIndicator.forEach((item) => item.classList.add('play_mode'))
+      cardTitle.forEach((item) => item.classList.add('play_mode'))
+      cardRotate.forEach((item) => item.classList.add('play_mode'))
       nav.classList.add('play_mode')
       line.classList.add('play_mode')
       burger.classList.add('play_mode')
+      start_btn.style.display = 'inline-block'
     } else {
       label.textContent = 'Train'
       cardIndicator.forEach((item) => item.classList.remove('play_mode'))
+      cardTitle.forEach((item) => item.classList.remove('play_mode'))
+      cardRotate.forEach((item) => item.classList.remove('play_mode'))
+      subCard.forEach((item) => item.classList.remove('play_mode'))
       nav.classList.remove('play_mode')
       line.classList.remove('play_mode')
       burger.classList.remove('play_mode')
+      start_btn.style.display = 'none'
+      repeat_btn.style.display = 'none'
     }
   })
 
@@ -97,7 +110,7 @@ async function createHeader() {
 
   burger.appendChild(line)
 
-/*   for (let card of cards) {
+  /*   for (let card of cards) {
     const { category } = card
     const nav_list__item = document.createElement('li')
     const link = document.createElement('a')
@@ -109,8 +122,6 @@ async function createHeader() {
     nav_list__item.setAttribute('name', `${category}`)
     link.textContent = `${category}`
   } */
-
-
 
   cards.forEach((card, i) => {
     const { category } = card
@@ -137,7 +148,7 @@ async function createHeader() {
     const parentId = e.target.parentElement.getAttribute('data-id')
     const parentClass =
       e.target.parentElement.classList.contains('nav_list__item')
-    if (parentName != "Main Page" && parentClass) {
+    if (parentName != 'Main Page' && parentClass) {
       const card = cards.find((item) => item.category === parentName)
       const subCards = card.words
       createSubCard(subCards)

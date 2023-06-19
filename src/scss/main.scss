@@ -5,6 +5,7 @@
 html {
   line-height: 1.15;
 }
+
 body {
   margin: 0;
   background-image: url('./assets/img/background.png');
@@ -14,6 +15,10 @@ body {
 
 main {
   padding: 0 60px;
+
+  &.finish {
+    display: none;
+  }
 }
 
 .section {
@@ -67,13 +72,20 @@ main {
     }
 
     .card__info_block {
+      min-height: 40px;
       position: relative;
       display: flex;
-      background-color: yellow;
+      background-color: #a8ced2;
       flex-direction: column;
       padding: 10px 20px;
       gap: 5px;
       border-radius: 0 0 10px 10px;
+
+      .info_block__subtitle {
+        &.play_mode {
+          display: none;
+        }
+      }
 
       .info_block__indicator {
         position: absolute;
@@ -107,7 +119,82 @@ main {
       .rotate {
         width: 30px;
         height: 30px;
+
+        &.play_mode {
+          display: none;
+        }
       }
+    }
+  }
+}
+
+.subCard {
+  &.passed {
+    opacity: 0.3;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+}
+
+.start_btn,
+.repeat_btn {
+  display: none;
+  margin-right: 70%;
+  width: 100px;
+  height: 35px;
+}
+
+.heart_section {
+  display: none;
+}
+
+.right,
+.wrong {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.right {
+  background-color: red;
+}
+
+.wrong {
+  background-color: gray;
+}
+
+.wrong-block {
+  .wrong_container {
+    text-align: center;
+    .wrong_image {
+      background-image: url('./assets/img/failureMy.png');
+      background-size: cover;
+      height: 500px;
+      width: 320px;
+      margin: auto;
+    }
+
+    .wrong_mistakes {
+      font-size: 30px;
+    }
+  }
+}
+
+.right-block {
+  .right_container {
+    text-align: center;
+    .right_image {
+      background-image: url('./assets/img/successMy.png');
+      background-size: cover;
+      height: 500px;
+      width: 320px;
+      margin: auto;
+    }
+
+    .right_perfect {
+      font-size: 30px;
     }
   }
 }

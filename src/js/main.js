@@ -6,6 +6,7 @@ import {
   createSubCard,
   id,
   playAudio,
+  playGame,
   rotate,
 } from './function'
 
@@ -15,8 +16,21 @@ export async function renderCard() {
   const body = document.body
   const main = document.createElement('main')
   const section = document.createElement('section')
+  const start_btn = document.createElement('button')
+  const repeat_btn = document.createElement('button')
+  const heart_section = document.createElement('div')
+  start_btn.classList.add('start_btn', 'btn', 'btn-secondary')
+  repeat_btn.classList.add('repeat_btn', 'btn', 'btn-primary')
+  heart_section.classList.add('heart_section')
+  start_btn.textContent = 'START'
+  repeat_btn.textContent = 'REPEAT'
+
   body.appendChild(main)
   main.appendChild(section)
+  main.appendChild(start_btn)
+  main.appendChild(repeat_btn)
+  main.appendChild(heart_section)
+
   buildCard(cards)
   createCard(cards)
 }
@@ -37,6 +51,7 @@ export async function renderSubCard() {
         playCard(id)
         rotateCard(id)
         active(name, '.nav_list__item')
+        startGame(id)
       }
     })
     item.addEventListener('mouseleave', (e) => {
@@ -93,12 +108,14 @@ export async function playCard(id) {
   subCollection.forEach((item) => {
     item.addEventListener('click', (e) => {
       const subCard = e.currentTarget
-      const name = subCard.getAttribute('name')
-      const subElements = cards[id].words
-      const word = subElements.find((item) => item.word === name)
-      if (word) {
-        const audio = word.audioSrc
-        playAudio(audio)
+      if (subCard.className != 'subCard play_mode') {
+        const name = subCard.getAttribute('name')
+        const subElements = cards[id].words
+        const word = subElements.find((item) => item.word === name)
+        if (word) {
+          const audio = word.audioSrc
+          playAudio(audio)
+        }
       }
     })
   })
@@ -124,13 +141,25 @@ export async function rotateCard(id) {
   subCollection.forEach((item) => {
     const rotate = item.querySelector('.rotate')
     rotate.addEventListener('click', (e) => {
-      const subElements = cards[id].words
-      const card = e.target.parentElement.parentElement
-      const title = e.target.parentElement.firstElementChild
+      const card = e.currentTarget.parentElement.parentElement
       const name = card.getAttribute('name')
+      const subElements = cards[id].words
       const word = subElements.find((item) => item.word === name)
       card.classList.add('_rotate')
-      title.textContent = word.translation
+      const title = card.querySelector('.info_block__subtitle')
+      title.textContent = 'перeвод'
     })
+  })
+}
+
+export async function startGame(id) {
+  const data = await getCards()
+  const arrayWord = data[id].words
+  const startBtn = document.querySelector('.start_btn')
+  const repeatBtn = document.querySelector('.repeat_btn')
+  startBtn.addEventListener('click', () => {
+    startBtn.style.display = 'none'
+    repeatBtn.style.display = 'inline-block'
+    playGame(arrayWord)
   })
 }
