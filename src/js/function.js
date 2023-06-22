@@ -1,9 +1,9 @@
 import { Card } from './card'
 
-export function buildCard(data) {
+export function buildCard(data, selector, className) {
   data.forEach((item, id) => {
     const card = new Card(id, item)
-    card.buildCardContainer()
+    card.buildCardContainer(selector, className)
   })
 }
 

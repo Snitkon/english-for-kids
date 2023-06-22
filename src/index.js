@@ -1,8 +1,9 @@
 import './index.scss'
 
-import createHeader from './js/header.js'
-import { renderSubCard, renderCard } from './js/main.js'
+import buildHeaderStructure from './js/header.js'
+import { mainRenderSubCard, firstRenderCard, buildMainStructure } from './js/main.js'
 
-createHeader()
-renderCard()
-renderSubCard()
+buildHeaderStructure()
+buildMainStructure()
+firstRenderCard()
+mainRenderSubCard()

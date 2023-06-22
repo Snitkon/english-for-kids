@@ -1,19 +1,20 @@
+import { playAudio } from './function'
+
 export class Card {
   constructor(id, cardData) {
     this.id = id
     this.cardData = cardData
   }
 
-  buildCardContainer() {
-    const section = document.querySelector('section')
+  buildCardContainer(selector, className) {
+    const block = document.querySelector(selector)
     const card = document.createElement('div')
     const cover = document.createElement('div')
     const infoContainer = document.createElement('div')
     const cardTitle = document.createElement('h2')
     const indicator = document.createElement('div')
 
-    section.classList.add('section')
-    card.classList.add('card')
+    card.classList.add(className)
     cover.classList.add('card__cover')
     infoContainer.classList.add('card__info_block')
     cardTitle.classList.add('info_block__title')
@@ -21,7 +22,7 @@ export class Card {
 
     card.setAttribute('id', this.id)
 
-    section.appendChild(card)
+    block.appendChild(card)
 
     card.appendChild(cover)
 
@@ -35,7 +36,10 @@ export class Card {
   }
 
   renderSubCard() {
-    new RenderSubCard(this.cardData, this.id).render()
+    const subCard = new RenderSubCard(this.cardData, this.id)
+    subCard.render()
+    subCard.rotate()
+    subCard.speech()
   }
 }
 
@@ -50,12 +54,11 @@ class RenderCard {
     const quantityWords = card.querySelector('.info_block__quantity')
 
     card.setAttribute('name', this.cardData.category)
-    card.classList.remove('subCard')
     card.classList.add('card')
+    // card.classList.remove('subCard')
 
     const infoContainer = card.querySelector('.card__info_block')
     const cover = card.querySelector('.card__cover')
-    // const cardTitle = card.querySelector('.info_block__title')
     const rotate = card.querySelector('.rotate')
 
     if (card.querySelector('.info_block__subtitle')) {
@@ -70,7 +73,6 @@ class RenderCard {
     }
 
     cover.style.backgroundImage = `url('${this.cardData.cover}')`
-    // cardTitle.innerText = this.cardData.category
     if (quantityWords === null) {
       const createQuantityWords = document.createElement('p')
       createQuantityWords.classList.add('info_block__quantity')
@@ -82,25 +84,32 @@ class RenderCard {
 }
 
 class RenderSubCard {
-  constructor({ word, translate, image, audioSrc }, id) {
-    this.cardData = { word, translate, image, audioSrc }
+  constructor({ word, translation, image, audioSrc }, id) {
+    this.cardData = { word, translation, image, audioSrc }
     this.id = id
   }
 
   render() {
     const card = document.getElementById(this.id)
-    const rotate = card.querySelector('.rotate')
+
+    const switcher = document.querySelector('.switcher')
+    const checked = switcher.firstChild.checked
+
+    // const rotate = card.querySelector('.rotate')
 
     card.setAttribute('name', this.cardData.word)
     card.classList.add('subCard')
-    card.classList.remove('card')
+    // card.classList.remove('card')
 
     const infoContainer = card.querySelector('.card__info_block')
     const cover = card.querySelector('.card__cover')
-    // const cardTitle = card.querySelector('.info_block__title')
     const quantityWords = card.querySelector('.info_block__quantity')
+    const cardTitle = card.querySelector('.info_block__title')
+    const cardIndicator = card.querySelector('.info_block__indicator')
+    cardTitle.className = 'info_block__subtitle'
 
-    if (card.querySelector('.info_block__title')) {
+
+    /* if (card.querySelector('.info_block__title')) {
       const cardTitle = card.querySelector('.info_block__title')
       cardTitle.className = 'info_block__subtitle'
       cardTitle.innerText = this.cardData.word
@@ -109,17 +118,59 @@ class RenderSubCard {
       const cardTitle = card.querySelector('.info_block__subtitle')
       cardTitle.className = 'info_block__subtitle'
       cardTitle.innerText = this.cardData.word
-    }
-    
-    // cardTitle.innerText = this.cardData.word
+    } */
+
+    cardTitle.innerText = this.cardData.word
     cover.style.backgroundImage = `url('${this.cardData.image}')`
-    if (rotate === null) {
+    // if (rotate === null) {
       const createRotate = document.createElement('img')
       createRotate.classList.add('rotate')
       createRotate.setAttribute('src', './assets/img/rotate.svg')
       infoContainer.appendChild(createRotate)
-    }
+    // }
 
     quantityWords && infoContainer.removeChild(quantityWords)
+
+    if(checked) {
+      cardTitle.classList.add('play_mode')
+      createRotate.classList.add('play_mode')
+      cardIndicator.classList.add('play_mode')
+    }
+  }
+
+  rotate() {
+    const card = document.getElementById(this.id)
+    const rotateImg = card.querySelector('.rotate')
+    const title = card.querySelector('.info_block__subtitle')
+
+    function rotate(data) {
+      title.innerText = data
+      card.classList.add('_rotate')
+    }
+
+    function returns(data) {
+      title.innerText = data
+      card.classList.remove('_rotate')
+    }
+
+    rotateImg.addEventListener('click', () => {
+      rotate(this.cardData.translation)
+    })
+
+    card.addEventListener('mouseleave', () => {
+      returns(this.cardData.word)
+    })
+  }
+
+  speech() {
+    const card = document.getElementById(this.id)
+
+    function pronunciation(data) {
+      playAudio(data)
+    }
+
+    card.addEventListener('click', () => {
+      pronunciation(this.cardData.audioSrc)
+    })
   }
 }
