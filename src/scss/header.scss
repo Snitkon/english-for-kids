@@ -78,7 +78,6 @@ body {
 
               &._active {
                 color: red;
-                
               }
             }
           }
@@ -151,14 +150,13 @@ body {
       .input:checked::before {
         background-color: $color-play;
       }
-
-      .input::after {
-        width: 15px;
-        height: 15px;
-      }
-      .input:checked::after {
-        left: 30px;
-      }
+    }
+    .input::after {
+      width: 15px;
+      height: 15px;
+    }
+    .input:checked::after {
+      left: 30px;
     }
   }
 }

@@ -129,6 +129,25 @@ main {
       }
     }
   }
+  .start_btn,
+  .repeat_btn {
+    display: none;
+    margin-right: 70%;
+    width: 100px;
+    height: 35px;
+  }
+
+  .heart_section {
+    display: none;
+  }
+
+  .start_btn,
+  .repeat_btn,
+  .heart_section {
+    &.play_mode {
+      display: inline-block;
+    }
+  }
 }
 
 .subCard {
@@ -137,18 +156,6 @@ main {
     box-shadow: none;
     cursor: not-allowed;
   }
-}
-
-.start_btn,
-.repeat_btn {
-  display: none;
-  margin-right: 70%;
-  width: 100px;
-  height: 35px;
-}
-
-.heart_section {
-  display: none;
 }
 
 .right,

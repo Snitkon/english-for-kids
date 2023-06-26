@@ -1,4 +1,6 @@
 import { Card } from './card'
+import getCards from './data'
+import Score from './score'
 
 export function buildCard(data, selector, className) {
   data.forEach((item, id) => {
@@ -19,6 +21,13 @@ export function createSubCard(data) {
     const subCard = new Card(id, item)
     subCard.renderSubCard()
   })
+  gameStart()
+}
+
+export function createScore(data) {
+  const score = new Score(data)
+  score.buildScoreContainer('main')
+  score.renderScore()
 }
 
 export function id(data) {
@@ -37,14 +46,41 @@ export function active(category, data) {
     const name = item.getAttribute('name')
     const link = item.firstElementChild
     if (name === category) {
+      item.classList.add('_active')
       link.classList.add('_active')
     } else {
+      item.classList.remove('_active')
       link.classList.remove('_active')
     }
   })
 }
 
 //For Game
+
+export function gameStart() {
+  const startBtn = document.querySelector('.start_btn')
+  const repeatBtn = document.querySelector('.repeat_btn')
+  const navlist = document.querySelector('.nav__list')
+  let c = function (e) {
+    startBtn.classList.remove('play_mode')
+    repeatBtn.classList.add('play_mode')
+    const navlist = document.querySelector('.nav__list')
+    const children = navlist.children
+    const arrElement = [...children]
+    const element = arrElement.find(
+      (item) => item.className === 'nav_list__item _active'
+    )
+    const id = element.getAttribute('data-id')
+    playGame(id)
+  }
+  startBtn.addEventListener('click', c)
+  navlist.addEventListener('click', (e) => {
+    if (e.target.closest('.nav_list__link')) {
+      clearHeartSection()
+      startBtn.removeEventListener('click', c)
+    }
+  })
+}
 
 export function getSound(data) {
   let arr = data
@@ -55,46 +91,64 @@ export function getSound(data) {
   return objWord
 }
 
-export function playGame(data) {
-  const section = document.querySelector('.section')
+export async function playGame(id) {
+  const data = await getCards()
+  const arrayWord = data[id].words
+  const subCardsBlock = document.querySelector('.subCardsBlock')
+  console.log(subCardsBlock)
   const repeat_btn = document.querySelector('.repeat_btn')
   const heart_section = document.querySelector('.heart_section')
-  heart_section.style.display = 'inline-block'
-  const arrData = data
+  const navlist = document.querySelector('.nav__list')
+  heart_section.classList.add('play_mode')
+  const arrData = arrayWord
   let dataWord = getSound(arrData)
-  section.addEventListener('click', (e) => {
-    let obj = dataWord
-    let heart = document.createElement('div')
-    let subCard = e.target.parentElement
-    let subCardName = subCard.getAttribute('name')
-    let word = obj[0].word
-    if (subCardName === word) {
-      subCard.classList.add('passed')
-      heart.classList.add('right')
-      heart_section.appendChild(heart)
-      playAudio('./assets/audio/correct.mp3')
-      if (arrData.length > 0) {
-        setTimeout(() => {
-          dataWord = getSound(arrData)
-        }, 1000)
-      } else {
-        finishGame()
-      }
-    } else {
-      heart.classList.add('wrong')
-      heart_section.appendChild(heart)
-      playAudio('./assets/audio/error.mp3')
-    }
-  })
-  repeat_btn.addEventListener('click', (e) => {
+  function a() {
     if (arrData.length > 0) {
       const sound = dataWord[0].audioSrc
       playAudio(sound)
     }
+  }
+  let b = function (e) {
+    if (e.target.closest('.subCard')) {
+      let obj = dataWord
+      let heart = document.createElement('div')
+      let subCard = e.target.parentElement
+      let subCardName = subCard.getAttribute('name')
+      let word = obj[0].word
+      if (subCardName === word) {
+        subCard.classList.add('passed')
+        heart.classList.add('right')
+        heart_section.appendChild(heart)
+        playAudio('./assets/audio/correct.mp3')
+        if (arrData.length > 0) {
+          setTimeout(() => {
+            dataWord = getSound(arrData)
+          }, 1000)
+        } else {
+          finishGame()
+        }
+      } else {
+        heart.classList.add('wrong')
+        heart_section.appendChild(heart)
+        playAudio('./assets/audio/error.mp3')
+      }
+    }
+  }
+  subCardsBlock.addEventListener('click', b)
+  repeat_btn.addEventListener('click', a)
+  navlist.addEventListener('click', (e) => {
+    if (e.target.closest('.nav_list__link')) {
+      clearHeartSection()
+      repeat_btn.removeEventListener('click', a)
+      subCardsBlock.removeEventListener('click', b)
+    }
   })
+}
 
-  if (arrData.length === 0) {
-    console.log('end')
+function clearHeartSection() {
+  const section = document.querySelector('.heart_section')
+  while (section.firstChild) {
+    section.removeChild(section.firstChild)
   }
 }
 
