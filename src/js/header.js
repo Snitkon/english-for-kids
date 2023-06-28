@@ -8,6 +8,7 @@ import {
   createSubCard,
   gameStart,
   playGame,
+  scoreData,
 } from './function'
 import {
   btn,
@@ -18,25 +19,6 @@ import {
   rotateSubCard,
   startGame,
 } from './main'
-
-const dataMoc = [
-  {
-    word: 'lion',
-    translation: 'лев',
-  },
-  {
-    word: 'cat',
-    translation: 'кот',
-  },
-  {
-    word: 'turtle',
-    translation: 'черепаха',
-  },
-  {
-    word: 'pig',
-    translation: 'свинья',
-  },
-]
 
 function buildHeaderStructure() {
   const body = document.body
@@ -205,6 +187,8 @@ async function setNavMenu() {
   })
 
   nav_list.addEventListener('click', (e) => {
+    const section = document.querySelector('.section')
+    const table = document.querySelector('.score_container')
     const name = e.target.parentElement.getAttribute('name')
     const id = e.target.parentElement.getAttribute('data-id')
     const className =
@@ -245,6 +229,8 @@ async function setNavMenu() {
       nav.classList.remove('_active')
       body.classList.remove('_active')
       shadow.classList.remove('_active')
+      table.classList.remove('_active')
+      section.classList.add('_active')
       active(name, '.nav_list__item')
     }
     if (name === 'Main Page' && className) {
@@ -269,20 +255,19 @@ async function setNavMenu() {
       nav.classList.remove('_active')
       body.classList.remove('_active')
       shadow.classList.remove('_active')
+      table.classList.remove('_active')
+      section.classList.add('_active')
       active(name, '.nav_list__item')
     }
     if (name === 'Score' && className) {
-      const section = document.querySelector('.section')
-      section.style.display = 'none'
-
       burger.classList.remove('_active')
       nav.classList.remove('_active')
       body.classList.remove('_active')
       shadow.classList.remove('_active')
-
+      section.classList.remove('_active')
+      table.classList.add('_active')
       active(name, '.nav_list__item')
-
-      createScore(cards)
+      scoreData()
     }
   })
 

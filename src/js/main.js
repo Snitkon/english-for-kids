@@ -3,6 +3,7 @@ import {
   active,
   buildCard,
   createCard,
+  createScore,
   createSubCard,
   gameStart,
   playAudio,
@@ -22,7 +23,7 @@ export function buildMainStructure() {
   start_btn.textContent = 'START'
   repeat_btn.textContent = 'REPEAT'
 
-  section.classList.add('section')
+  section.classList.add('section', '_active')
   categoryCard.classList.add('cardsBlock')
   subCard.classList.add('subCardsBlock')
   start_btn.classList.add('start_btn', 'btn', 'btn-secondary')
@@ -36,6 +37,11 @@ export function buildMainStructure() {
   section.appendChild(start_btn)
   section.appendChild(repeat_btn)
   section.appendChild(heart_section)
+}
+
+export async function buildScore() {
+  const cards = await getCards()
+  createScore(cards)
 }
 
 export async function firstRenderCard() {
@@ -75,7 +81,7 @@ export async function mainRenderSubCard() {
         arrCollection.forEach((item) => {
           block.removeChild(item)
         })
-        let checked = switcher.firstChild.checked = false
+        let checked = (switcher.firstChild.checked = false)
         checkedMode(checked)
         const renderElement = element.words
         active(name, '.nav_list__item')

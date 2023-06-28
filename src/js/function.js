@@ -95,13 +95,16 @@ export async function playGame(id) {
   const data = await getCards()
   const arrayWord = data[id].words
   const subCardsBlock = document.querySelector('.subCardsBlock')
-  console.log(subCardsBlock)
   const repeat_btn = document.querySelector('.repeat_btn')
   const heart_section = document.querySelector('.heart_section')
   const navlist = document.querySelector('.nav__list')
   heart_section.classList.add('play_mode')
   const arrData = arrayWord
   let dataWord = getSound(arrData)
+  const getCorrect = JSON.parse(localStorage.getItem('correct'))
+  const getError = JSON.parse(localStorage.getItem('error'))
+  const correct = getCorrect ? [...getCorrect] : []
+  const error = getError ? [...getError] : []
   function a() {
     if (arrData.length > 0) {
       const sound = dataWord[0].audioSrc
@@ -120,17 +123,19 @@ export async function playGame(id) {
         heart.classList.add('right')
         heart_section.appendChild(heart)
         playAudio('./assets/audio/correct.mp3')
+        createSeccessData(id, correct, subCardName)
         if (arrData.length > 0) {
           setTimeout(() => {
             dataWord = getSound(arrData)
           }, 1000)
         } else {
-          finishGame()
+          finishGame(correct, error)
         }
       } else {
         heart.classList.add('wrong')
         heart_section.appendChild(heart)
         playAudio('./assets/audio/error.mp3')
+        createErrorData(id, error, subCardName)
       }
     }
   }
@@ -152,7 +157,7 @@ function clearHeartSection() {
   }
 }
 
-export function finishGame() {
+export function finishGame(correctArr, errorArr) {
   const heart_section = document.querySelector('.heart_section')
   const children = heart_section.children
   const arrCollection = [...children]
@@ -160,8 +165,14 @@ export function finishGame() {
     previously[current.className] = (previously[current.className] || 0) + 1
     return previously
   }, {})
+
   const wrong = counts.wrong
   const right = counts.right
+
+  const correctJson = JSON.stringify(correctArr)
+  const errorJson = JSON.stringify(errorArr)
+  localStorage.setItem('correct', correctJson)
+  localStorage.setItem('error', errorJson)
 
   if (wrong) {
     const body = document.querySelector('body')
@@ -218,5 +229,66 @@ export function finishGame() {
       main.classList.toggle('finish')
       location.reload()
     }, 3000)
+  }
+}
+
+async function createSeccessData(id, arr, data) {
+  const category = await getCards()
+  const arrWords = category[id].words
+  const word = arrWords.find((item) => item.word === data)
+  if (arr.length > 0) {
+    let add
+    for (let item of arr) {
+      if (item[0] === word.word) {
+        ++item[1]
+      }
+    }
+    if (!add) {
+      arr.push([word.word, 1])
+    }
+  }
+  if (arr.length === 0) {
+    arr.push([word.word, 1])
+  }
+}
+
+async function createErrorData(id, arr, data) {
+  const category = await getCards()
+  const arrWords = category[id].words
+  const word = arrWords.find((item) => item.word === data)
+  if (arr.length > 0) {
+    let add
+    for (let item of arr) {
+      if (item[0] === word.word) {
+        ++item[1]
+        add = true
+      }
+    }
+    if (!add) {
+      arr.push([word.word, 1])
+    }
+  }
+  if (arr.length === 0) {
+    arr.push([word.word, 1])
+  }
+}
+
+export function scoreData() {
+  const table = document.querySelector('.score_container')
+  const row = table.rows
+  const correctData = JSON.parse(localStorage.getItem('correct'))
+  const errorData = JSON.parse(localStorage.getItem('error'))
+  for (let item of row) {
+    console.log(item.cells[2].innerHTML)
+    const firstCell = item.cells[0].innerHTML
+    const correct =
+      correctData && correctData.find((item) => item[0] === firstCell)
+    const error = errorData && errorData.find((item) => item[0] === firstCell)
+    if (correct) {
+      item.cells[2].innerHTML = `${correct[1]}`
+    }
+    if (error) {
+      item.cells[3].innerHTML = `${error[1]}`
+    }
   }
 }
