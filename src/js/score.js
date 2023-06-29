@@ -8,29 +8,38 @@ class Score {
     const scoreContainer = document.createElement('table')
     const scoreHeader = document.createElement('tr')
 
+    const resetBtn = document.createElement('button')
     const dataCellEngWord = document.createElement('td')
     const dataCellRusWord = document.createElement('td')
     const dataCellCorrect = document.createElement('td')
     const dataCellError = document.createElement('td')
+    const dataCorrectPercent = document.createElement('td')
 
+    resetBtn.classList.add('reset_btn', 'btn', 'btn-danger')
+    resetBtn.setAttribute('type', 'button')
     scoreContainer.classList.add('score_container')
     scoreHeader.classList.add('score_header')
     dataCellEngWord.classList.add('english')
     dataCellRusWord.classList.add('russian')
     dataCellCorrect.classList.add('correct')
     dataCellError.classList.add('error')
+    dataCorrectPercent.classList.add('percent')
 
+    resetBtn.textContent = 'Reset'
     dataCellEngWord.textContent = 'English'
     dataCellRusWord.textContent = 'Russian'
     dataCellCorrect.textContent = 'Correct'
     dataCellError.textContent = 'Error'
+    dataCorrectPercent.textContent = 'Correct score'
 
+    block.appendChild(resetBtn)
     block.appendChild(scoreContainer)
     scoreContainer.appendChild(scoreHeader)
     scoreHeader.appendChild(dataCellEngWord)
     scoreHeader.appendChild(dataCellRusWord)
     scoreHeader.appendChild(dataCellCorrect)
     scoreHeader.appendChild(dataCellError)
+    scoreHeader.appendChild(dataCorrectPercent)
   }
 
   renderScore() {
@@ -54,15 +63,22 @@ class ScoreBlock {
     const dataCellRusWord = document.createElement('td')
     const dataCellCorrect = document.createElement('td')
     const dataCellError = document.createElement('td')
+    const dataCorrectPercent = document.createElement('td')
 
     dataCellEngWord.textContent = this.data.word
     dataCellRusWord.textContent = this.data.translation
+    dataCellCorrect.textContent = '-'
+    dataCellError.textContent = '-'
+    dataCellError.textContent = '-'
+    dataCorrectPercent.textContent = '-'
+
 
     table.appendChild(strInfo)
     strInfo.appendChild(dataCellEngWord)
     strInfo.appendChild(dataCellRusWord)
     strInfo.appendChild(dataCellCorrect)
     strInfo.appendChild(dataCellError)
+    strInfo.appendChild(dataCorrectPercent)
   }
 }
 

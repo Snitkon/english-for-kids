@@ -1,3 +1,10 @@
+.reset_btn {
+  display: none;
+
+  &._active {
+    display: block;
+  }
+}
 .score_container {
   display: none;
   width: 100%;

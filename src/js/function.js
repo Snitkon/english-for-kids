@@ -123,11 +123,11 @@ export async function playGame(id) {
         heart.classList.add('right')
         heart_section.appendChild(heart)
         playAudio('./assets/audio/correct.mp3')
-        createSeccessData(id, correct, subCardName)
+        createSeccessData(correct, word)
         if (arrData.length > 0) {
           setTimeout(() => {
             dataWord = getSound(arrData)
-          }, 1000)
+          }, 500)
         } else {
           finishGame(correct, error)
         }
@@ -135,7 +135,7 @@ export async function playGame(id) {
         heart.classList.add('wrong')
         heart_section.appendChild(heart)
         playAudio('./assets/audio/error.mp3')
-        createErrorData(id, error, subCardName)
+        createErrorData(error, word)
       }
     }
   }
@@ -199,7 +199,7 @@ export function finishGame(correctArr, errorArr) {
     setTimeout(() => {
       body.removeChild(wrongBlock)
       main.classList.toggle('finish')
-      location.reload()
+      // location.reload()
     }, 3000)
   }
   if (!wrong) {
@@ -227,49 +227,44 @@ export function finishGame(correctArr, errorArr) {
     setTimeout(() => {
       body.removeChild(rightBlock)
       main.classList.toggle('finish')
-      location.reload()
+      // location.reload()
     }, 3000)
   }
 }
 
-async function createSeccessData(id, arr, data) {
-  const category = await getCards()
-  const arrWords = category[id].words
-  const word = arrWords.find((item) => item.word === data)
+function createSeccessData(arr, data) {
   if (arr.length > 0) {
-    let add
+    let add = false
     for (let item of arr) {
-      if (item[0] === word.word) {
-        ++item[1]
-      }
-    }
-    if (!add) {
-      arr.push([word.word, 1])
-    }
-  }
-  if (arr.length === 0) {
-    arr.push([word.word, 1])
-  }
-}
-
-async function createErrorData(id, arr, data) {
-  const category = await getCards()
-  const arrWords = category[id].words
-  const word = arrWords.find((item) => item.word === data)
-  if (arr.length > 0) {
-    let add
-    for (let item of arr) {
-      if (item[0] === word.word) {
+      if (item[0] === data) {
         ++item[1]
         add = true
       }
     }
     if (!add) {
-      arr.push([word.word, 1])
+      arr.push([data, 1])
     }
   }
   if (arr.length === 0) {
-    arr.push([word.word, 1])
+    arr.push([data, 1])
+  }
+}
+
+function createErrorData(arr, data) {
+  if (arr.length > 0) {
+    let add
+    for (let item of arr) {
+      if (item[0] === data) {
+        ++item[1]
+        add = true
+      }
+    }
+    if (!add) {
+      arr.push([data, 1])
+    }
+  }
+  if (arr.length === 0) {
+    arr.push([data, 1])
   }
 }
 
@@ -279,7 +274,6 @@ export function scoreData() {
   const correctData = JSON.parse(localStorage.getItem('correct'))
   const errorData = JSON.parse(localStorage.getItem('error'))
   for (let item of row) {
-    console.log(item.cells[2].innerHTML)
     const firstCell = item.cells[0].innerHTML
     const correct =
       correctData && correctData.find((item) => item[0] === firstCell)
@@ -289,6 +283,11 @@ export function scoreData() {
     }
     if (error) {
       item.cells[3].innerHTML = `${error[1]}`
+    }
+    if (correct && error && (correct[0]  === error[0])) {
+      const totalAttempts = correct[1] + error[1]
+      const accuracy = ((correct[1] / totalAttempts)*100).toFixed()
+      item.cells[4].innerHTML = `${accuracy}%`
     }
   }
 }

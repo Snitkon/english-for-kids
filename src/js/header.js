@@ -84,8 +84,8 @@ function buildHeaderStructure() {
   nav_list.appendChild(second_score_item)
   first_main_item.appendChild(first_link)
   second_score_item.appendChild(second_link)
-
   burger.appendChild(line)
+
   setSwitcher()
   setNavMenu()
 }
@@ -189,6 +189,7 @@ async function setNavMenu() {
   nav_list.addEventListener('click', (e) => {
     const section = document.querySelector('.section')
     const table = document.querySelector('.score_container')
+    const resetBtn = document.querySelector('.reset_btn')
     const name = e.target.parentElement.getAttribute('name')
     const id = e.target.parentElement.getAttribute('data-id')
     const className =
@@ -229,6 +230,7 @@ async function setNavMenu() {
       nav.classList.remove('_active')
       body.classList.remove('_active')
       shadow.classList.remove('_active')
+      resetBtn.classList.remove('_active')
       table.classList.remove('_active')
       section.classList.add('_active')
       active(name, '.nav_list__item')
@@ -255,6 +257,7 @@ async function setNavMenu() {
       nav.classList.remove('_active')
       body.classList.remove('_active')
       shadow.classList.remove('_active')
+      resetBtn.classList.remove('_active')
       table.classList.remove('_active')
       section.classList.add('_active')
       active(name, '.nav_list__item')
@@ -265,6 +268,7 @@ async function setNavMenu() {
       body.classList.remove('_active')
       shadow.classList.remove('_active')
       section.classList.remove('_active')
+      resetBtn.classList.add('_active')
       table.classList.add('_active')
       active(name, '.nav_list__item')
       scoreData()
