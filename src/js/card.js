@@ -14,7 +14,7 @@ export class Card {
     const cardTitle = document.createElement('h2')
     const indicator = document.createElement('div')
 
-/*     const switcher = document.querySelector('.switcher')
+    /*     const switcher = document.querySelector('.switcher')
     const checked = switcher.firstChild.checked
     if (checked) {
       card.classList.add(className, 'play_mode')
@@ -91,7 +91,7 @@ class RenderCard {
     }
     rotate && infoContainer.removeChild(rotate)
 
-/*     if (checked) {
+    /*     if (checked) {
       indicator.classList.add('play_mode')
     } */
   }
@@ -144,7 +144,7 @@ class RenderSubCard {
 
     quantityWords && infoContainer.removeChild(quantityWords)
 
-/*     if (checked) {
+    /*     if (checked) {
       cardTitle.classList.add('play_mode')
       createRotate.classList.add('play_mode')
       cardIndicator.classList.add('play_mode')

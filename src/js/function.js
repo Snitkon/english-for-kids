@@ -269,10 +269,13 @@ function createErrorData(arr, data) {
 }
 
 export function scoreData() {
+  resetScore()
   const table = document.querySelector('.score_container')
   const row = table.rows
   const correctData = JSON.parse(localStorage.getItem('correct'))
   const errorData = JSON.parse(localStorage.getItem('error'))
+  console.log(correctData)
+  console.log(errorData)
   for (let item of row) {
     const firstCell = item.cells[0].innerHTML
     const correct =
@@ -280,14 +283,29 @@ export function scoreData() {
     const error = errorData && errorData.find((item) => item[0] === firstCell)
     if (correct) {
       item.cells[2].innerHTML = `${correct[1]}`
+      item.cells[4].innerHTML = '100%'
     }
     if (error) {
       item.cells[3].innerHTML = `${error[1]}`
     }
-    if (correct && error && (correct[0]  === error[0])) {
+    if (correct && error && correct[0] === error[0]) {
       const totalAttempts = correct[1] + error[1]
-      const accuracy = ((correct[1] / totalAttempts)*100).toFixed()
+      const accuracy = ((correct[1] / totalAttempts) * 100).toFixed()
       item.cells[4].innerHTML = `${accuracy}%`
     }
+    if (correctData === null && errorData === null) {
+      console.log('ok')
+      item.cells[2].innerHTML = '-'
+      item.cells[3].innerHTML = '-'
+      item.cells[4].innerHTML = '-'
+    }
   }
+}
+
+export async function resetScore() {
+  const resetBtn = document.querySelector('.reset_btn')
+  resetBtn.addEventListener('click', () => {
+    localStorage.clear()
+    scoreData()
+  })
 }
