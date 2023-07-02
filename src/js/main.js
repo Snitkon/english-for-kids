@@ -2,6 +2,7 @@ import getCards from './data'
 import {
   active,
   buildCard,
+  clickCounts,
   createCard,
   createScore,
   createSubCard,
@@ -87,6 +88,7 @@ export async function mainRenderSubCard() {
         active(name, '.nav_list__item')
         buildCard(cards, '.subCardsBlock', 'subCard')
         createSubCard(renderElement)
+        clickCounts()
         // gameStart()
         // startGame(id)
       }

@@ -67,9 +67,7 @@ export function gameStart() {
     const navlist = document.querySelector('.nav__list')
     const children = navlist.children
     const arrElement = [...children]
-    const element = arrElement.find(
-      (item) => item.className === 'nav_list__item _active'
-    )
+    const element = arrElement.find((item) => item.className === 'nav_list__item _active')
     const id = element.getAttribute('data-id')
     playGame(id)
   }
@@ -241,7 +239,7 @@ function createSeccessData(arr, data) {
         add = true
       }
     }
-    if (!add) {
+    if (add === false) {
       arr.push([data, 1])
     }
   }
@@ -252,14 +250,14 @@ function createSeccessData(arr, data) {
 
 function createErrorData(arr, data) {
   if (arr.length > 0) {
-    let add
+    let add = false
     for (let item of arr) {
       if (item[0] === data) {
         ++item[1]
         add = true
       }
     }
-    if (!add) {
+    if (add === false) {
       arr.push([data, 1])
     }
   }
@@ -268,36 +266,73 @@ function createErrorData(arr, data) {
   }
 }
 
+export function clickCounts() {
+  const block = document.querySelector('.subCardsBlock')
+  const children = block.children
+  const arrCollection = [...children]
+  arrCollection.forEach((item) => {
+    item.addEventListener('click', (e) => {
+      const card = e.currentTarget
+      const name = card.getAttribute('name')
+      if (card.className === 'subCard') {
+        const getClick = JSON.parse(localStorage.getItem('click'))
+        const click = getClick ? [...getClick] : []
+        if (click.length > 0) {
+          let find = false
+          for (let item of click) {
+            if (item[0] === name) {
+              ++item[1]
+              find = true
+            }
+          }
+          if (find === false) {
+            click.push([name, 1])
+          }
+        }
+        if (click.length === 0) {
+          click.push([name, 1])
+        }
+        const clickJson = JSON.stringify(click)
+        localStorage.setItem('click', clickJson)
+      }
+    })
+  })
+}
+
 export function scoreData() {
   resetScore()
   const table = document.querySelector('.score_container')
   const row = table.rows
   const correctData = JSON.parse(localStorage.getItem('correct'))
   const errorData = JSON.parse(localStorage.getItem('error'))
+  const clickData = JSON.parse(localStorage.getItem('click'))
   console.log(correctData)
   console.log(errorData)
   for (let item of row) {
     const firstCell = item.cells[0].innerHTML
-    const correct =
-      correctData && correctData.find((item) => item[0] === firstCell)
+    const click = clickData && clickData.find((item) => item[0] === firstCell)
+    const correct = correctData && correctData.find((item) => item[0] === firstCell)
     const error = errorData && errorData.find((item) => item[0] === firstCell)
+    if (click) {
+      item.cells[2].innerHTML = `${click[1]}`
+    }
     if (correct) {
-      item.cells[2].innerHTML = `${correct[1]}`
-      item.cells[4].innerHTML = '100%'
+      item.cells[3].innerHTML = `${correct[1]}`
+      item.cells[5].innerHTML = '100%'
     }
     if (error) {
-      item.cells[3].innerHTML = `${error[1]}`
+      item.cells[4].innerHTML = `${error[1]}`
     }
     if (correct && error && correct[0] === error[0]) {
       const totalAttempts = correct[1] + error[1]
       const accuracy = ((correct[1] / totalAttempts) * 100).toFixed()
-      item.cells[4].innerHTML = `${accuracy}%`
+      item.cells[5].innerHTML = `${accuracy}%`
     }
     if (correctData === null && errorData === null) {
-      console.log('ok')
       item.cells[2].innerHTML = '-'
       item.cells[3].innerHTML = '-'
       item.cells[4].innerHTML = '-'
+      item.cells[5].innerHTML = '-'
     }
   }
 }

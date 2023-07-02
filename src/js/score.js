@@ -11,6 +11,7 @@ class Score {
     const resetBtn = document.createElement('button')
     const dataCellEngWord = document.createElement('td')
     const dataCellRusWord = document.createElement('td')
+    const dataCellClickWord = document.createElement('td')
     const dataCellCorrect = document.createElement('td')
     const dataCellError = document.createElement('td')
     const dataCorrectPercent = document.createElement('td')
@@ -21,6 +22,7 @@ class Score {
     scoreHeader.classList.add('score_header')
     dataCellEngWord.classList.add('english')
     dataCellRusWord.classList.add('russian')
+    dataCellClickWord.classList.add('click')
     dataCellCorrect.classList.add('correct')
     dataCellError.classList.add('error')
     dataCorrectPercent.classList.add('percent')
@@ -28,6 +30,7 @@ class Score {
     resetBtn.textContent = 'Reset'
     dataCellEngWord.textContent = 'English'
     dataCellRusWord.textContent = 'Russian'
+    dataCellClickWord.textContent = 'Click'
     dataCellCorrect.textContent = 'Correct'
     dataCellError.textContent = 'Error'
     dataCorrectPercent.textContent = 'Correct score'
@@ -37,6 +40,7 @@ class Score {
     scoreContainer.appendChild(scoreHeader)
     scoreHeader.appendChild(dataCellEngWord)
     scoreHeader.appendChild(dataCellRusWord)
+    scoreHeader.appendChild(dataCellClickWord)
     scoreHeader.appendChild(dataCellCorrect)
     scoreHeader.appendChild(dataCellError)
     scoreHeader.appendChild(dataCorrectPercent)
@@ -62,11 +66,13 @@ class ScoreBlock {
     const dataCellEngWord = document.createElement('td')
     const dataCellRusWord = document.createElement('td')
     const dataCellCorrect = document.createElement('td')
+    const dataCellClickWord = document.createElement('td')
     const dataCellError = document.createElement('td')
     const dataCorrectPercent = document.createElement('td')
 
     dataCellEngWord.textContent = this.data.word
     dataCellRusWord.textContent = this.data.translation
+    dataCellClickWord.textContent = '-'
     dataCellCorrect.textContent = '-'
     dataCellError.textContent = '-'
     dataCellError.textContent = '-'
@@ -76,6 +82,7 @@ class ScoreBlock {
     table.appendChild(strInfo)
     strInfo.appendChild(dataCellEngWord)
     strInfo.appendChild(dataCellRusWord)
+    strInfo.appendChild(dataCellClickWord)
     strInfo.appendChild(dataCellCorrect)
     strInfo.appendChild(dataCellError)
     strInfo.appendChild(dataCorrectPercent)
