@@ -3,6 +3,7 @@ import getCards from './data'
 import {
   active,
   buildCard,
+  clickCounts,
   createCard,
   createScore,
   createSubCard,
@@ -218,6 +219,7 @@ async function setNavMenu() {
         checkedMode(checked)
         buildCard(subCards, '.subCardsBlock', 'subCard')
         createSubCard(subCards)
+        clickCounts()
         // gameStart()
         // startGame(id)
       } else if (isSubBlockChildren.length === 0) {
@@ -225,6 +227,7 @@ async function setNavMenu() {
         checkedMode(checked)
         buildCard(subCards, '.subCardsBlock', 'subCard')
         createSubCard(subCards)
+        clickCounts()
         // gameStart()
         // startGame(id)
       }

@@ -1,5 +1,6 @@
 import { Card } from './card'
 import getCards from './data'
+import { checkedMode } from './header'
 import Score from './score'
 
 export function buildCard(data, selector, className) {
@@ -103,6 +104,7 @@ export async function playGame(id) {
   const getError = JSON.parse(localStorage.getItem('error'))
   const correct = getCorrect ? [...getCorrect] : []
   const error = getError ? [...getError] : []
+  let count = 0
   function a() {
     if (arrData.length > 0) {
       const sound = dataWord[0].audioSrc
@@ -113,15 +115,18 @@ export async function playGame(id) {
     if (e.target.closest('.subCard')) {
       let obj = dataWord
       let heart = document.createElement('div')
+      heart.classList.add('heart')
       let subCard = e.target.parentElement
       let subCardName = subCard.getAttribute('name')
       let word = obj[0].word
       if (subCardName === word) {
+        ++count
         subCard.classList.add('passed')
         heart.classList.add('right')
         heart_section.appendChild(heart)
         playAudio('./assets/audio/correct.mp3')
         createSeccessData(correct, word)
+        removeHeart(count)
         if (arrData.length > 0) {
           setTimeout(() => {
             dataWord = getSound(arrData)
@@ -130,10 +135,12 @@ export async function playGame(id) {
           finishGame(correct, error)
         }
       } else {
+        ++count
         heart.classList.add('wrong')
         heart_section.appendChild(heart)
         playAudio('./assets/audio/error.mp3')
         createErrorData(error, word)
+        removeHeart(count)
       }
     }
   }
@@ -155,17 +162,30 @@ function clearHeartSection() {
   }
 }
 
-export function finishGame(correctArr, errorArr) {
+function removeHeart(count) {
+  const heart = document.querySelectorAll('.heart')
+  if (heart.length >= 8) {
+    heart[count - 8].style.display = 'none'
+  }
+}
+
+export async function finishGame(correctArr, errorArr) {
+  const cards = await getCards()
+  const switcher = document.querySelector('.switcher')
   const heart_section = document.querySelector('.heart_section')
+  const subCardBlock = document.querySelector('.subCardsBlock')
+  const isSubBlockChildren = subCardBlock.children
+  const arrSubBlockCollection = [...isSubBlockChildren]
   const children = heart_section.children
   const arrCollection = [...children]
+  console.log(arrCollection)
   const counts = arrCollection.reduce((previously, current) => {
     previously[current.className] = (previously[current.className] || 0) + 1
     return previously
   }, {})
 
-  const wrong = counts.wrong
-  const right = counts.right
+  const wrong = counts['heart wrong']
+  const right = counts['heart right']
 
   const correctJson = JSON.stringify(correctArr)
   const errorJson = JSON.stringify(errorArr)
@@ -197,6 +217,14 @@ export function finishGame(correctArr, errorArr) {
     setTimeout(() => {
       body.removeChild(wrongBlock)
       main.classList.toggle('finish')
+      let checked = (switcher.firstChild.checked = false)
+      checkedMode(checked)
+      arrSubBlockCollection.forEach((item) => {
+        subCardBlock.removeChild(item)
+      })
+      buildCard(cards, '.cardsBlock', 'card')
+      createCard(cards)
+      clearHeartSection()
       // location.reload()
     }, 3000)
   }
@@ -220,11 +248,22 @@ export function finishGame(correctArr, errorArr) {
     container.appendChild(image)
     container.appendChild(perfect)
 
+    const error = localStorage.getItem('error')
+    console.log(error)
+
     perfect.textContent = 'Good job'
     playAudio('./assets/audio/success.mp3')
     setTimeout(() => {
       body.removeChild(rightBlock)
       main.classList.toggle('finish')
+      let checked = (switcher.firstChild.checked = false)
+      checkedMode(checked)
+      arrSubBlockCollection.forEach((item) => {
+        subCardBlock.removeChild(item)
+      })
+      buildCard(cards, '.cardsBlock', 'card')
+      createCard(cards)
+      clearHeartSection()
       // location.reload()
     }, 3000)
   }
