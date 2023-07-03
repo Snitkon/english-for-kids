@@ -8,7 +8,9 @@ import {
   createSubCard,
   gameStart,
   playGame,
+  resetScore,
   scoreData,
+  sortScore,
 } from './function'
 import {
   btn,
@@ -272,6 +274,8 @@ async function setNavMenu() {
       table.classList.add('_active')
       active(name, '.nav_list__item')
       scoreData()
+      resetScore()
+      sortScore()
     }
   })
 

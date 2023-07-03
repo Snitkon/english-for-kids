@@ -300,14 +300,11 @@ export function clickCounts() {
 }
 
 export function scoreData() {
-  resetScore()
   const table = document.querySelector('.score_container')
   const row = table.rows
   const correctData = JSON.parse(localStorage.getItem('correct'))
   const errorData = JSON.parse(localStorage.getItem('error'))
   const clickData = JSON.parse(localStorage.getItem('click'))
-  console.log(correctData)
-  console.log(errorData)
   for (let item of row) {
     const firstCell = item.cells[0].innerHTML
     const click = clickData && clickData.find((item) => item[0] === firstCell)
@@ -328,11 +325,11 @@ export function scoreData() {
       const accuracy = ((correct[1] / totalAttempts) * 100).toFixed()
       item.cells[5].innerHTML = `${accuracy}%`
     }
-    if (correctData === null && errorData === null) {
-      item.cells[2].innerHTML = '-'
-      item.cells[3].innerHTML = '-'
-      item.cells[4].innerHTML = '-'
-      item.cells[5].innerHTML = '-'
+    if (correctData === null && errorData === null && clickData === null) {
+      item.cells[2].innerHTML === 'Click' ? (item.cells[2].innerHTML = 'Click') : (item.cells[2].innerHTML = '-')
+      item.cells[3].innerHTML === 'Correct' ? (item.cells[3].innerHTML = 'Correct') : (item.cells[3].innerHTML = '-')
+      item.cells[4].innerHTML === 'Error' ? (item.cells[4].innerHTML = 'Error') : (item.cells[4].innerHTML = '-')
+      item.cells[5].innerHTML === 'Correct score' ? (item.cells[5].innerHTML = 'Correct score') : (item.cells[5].innerHTML = '-')
     }
   }
 }
@@ -343,4 +340,95 @@ export async function resetScore() {
     localStorage.clear()
     scoreData()
   })
+}
+
+export function sortScore() {
+  const table = document.querySelector('.score_container')
+  const row = table.rows
+  const header = row[0]
+  let sortOrder = 'asc'
+  header.addEventListener('click', (e) => {
+    const target = e.target
+    if (sortOrder === 'asc') {
+      sortOrder = 'desc'
+    } else {
+      sortOrder = 'asc'
+    }
+    if (target.closest('.english')) {
+      sortTable(0, sortOrder)
+    }
+    if (target.closest('.russian')) {
+      sortTable(1, sortOrder)
+    }
+    if (target.closest('.click')) {
+      sortTable(2, sortOrder)
+    }
+    if (target.closest('.correct')) {
+      sortTable(3, sortOrder)
+    }
+    if (target.closest('.error')) {
+      sortTable(4, sortOrder)
+    }
+    if (target.closest('.percent')) {
+      sortTable(5, sortOrder)
+    }
+  })
+}
+
+function sortTable(columnIndex, sortDirection) {
+  let rows, i, x, y, shouldSwitch
+  const table = document.querySelector('.score_container')
+  let switching = true
+
+  while (switching) {
+    switching = false
+    rows = table.rows
+    shouldSwitch = false
+
+    for (i = 1; i < rows.length - 1; i++) {
+      shouldSwitch = false
+
+      x = rows[i].getElementsByTagName('td')[columnIndex]
+      y = rows[i + 1].getElementsByTagName('td')[columnIndex]
+
+      const xValue = getValueForSorting(x.innerHTML)
+      const yValue = getValueForSorting(y.innerHTML)
+
+      if (xValue === '-' && yValue !== '-') {
+        shouldSwitch = true
+        break
+      } else if (yValue === '-' && xValue !== '-') {
+        continue
+      }
+
+      if (sortDirection === 'asc') {
+        if (xValue > yValue) {
+          shouldSwitch = true
+          break
+        }
+      } else if (sortDirection === 'desc') {
+        if (xValue < yValue) {
+          shouldSwitch = true
+          break
+        }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i])
+      switching = true
+    }
+  }
+}
+
+function getValueForSorting(value) {
+  const numberRegex = /^-?\d+(?:\.\d+)?$/
+  const percentageRegex = /^-?\d+(?:\.\d+)?%$/
+
+  if (numberRegex.test(value)) {
+    return parseFloat(value)
+  } else if (percentageRegex.test(value)) {
+    return parseFloat(value.replace('%', ''))
+  } else {
+    return value
+  }
 }
