@@ -13,28 +13,15 @@ const baseConfig = {
   },
   module: {
     rules: [
-      // {
-      //   test: /\.(js|jsx)$/i,
-      //   loader: 'babel-loader',
-      // },
       {
         test: /\.s[ac]ss$/i,
         use: [
-          // 'style-loader',
           {
             loader: MiniCssExtractPlugin.loader,
             options: { publicPath: '../assets/' },
           },
           'css-loader',
           { loader: 'sass-loader', options: { sourceMap: true } },
-
-          // {
-          //   loader: 'sass-resources-loader',          //   дщфву эыфыы-куыщгксуы-дщфвукэб
-
-          //   options: {
-          //     resources: ['src/scss/style.scss'],
-          //   },
-          // },
         ],
       },
       {
@@ -42,29 +29,8 @@ const baseConfig = {
         type: 'asset/resource',
         generator: { outputPath: 'assets' },
       },
-      // {
-      // test: /\.(png|jpe?g|gif|svg)$/i,
-      // use: [
-      //   {
-      //     loader: 'file-loader',
-      //     options: {
-      //       // name: '[path][name].[ext]',
-      //       outputPath: 'assets',
-      //     },
-      //   },
-      // {
-      //   loader: 'url-loader',
-      //   options: {
-      //     limit: 8192,
-      //   },
-      // },
-      //     ],
-      //   },
     ],
   },
-  // resolve: {
-  //   extensions: ['.js', '.scss', '.css', '.jsx'],
-  // },
   plugins: [
     new MiniCssExtractPlugin(),
     new CleanWebpackPlugin(),
