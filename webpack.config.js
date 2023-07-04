@@ -18,7 +18,7 @@ const baseConfig = {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: { publicPath: '../assets/' },
+            options: { publicPath: '../dist/assets/img/' },
           },
           'css-loader',
           { loader: 'sass-loader', options: { sourceMap: true } },
@@ -27,7 +27,7 @@ const baseConfig = {
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
         type: 'asset/resource',
-        generator: { outputPath: 'assets' },
+        generator: { outputPath: 'assets/img' },
       },
     ],
   },
@@ -35,7 +35,7 @@ const baseConfig = {
     new MiniCssExtractPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      entry: 'index.js',
+      entry: 'index.html',
       template: path.resolve(__dirname, './src/index.html'),
     }),
     new CopyPlugin({
@@ -44,7 +44,7 @@ const baseConfig = {
           from: 'src/assets/',
           to: 'assets',
           globOptions: {
-            ignore: ["**.(png|jpe?g|gif|svg)"],
+            ignore: ['**.(png|jpe?g|gif|svg)'],
           },
         },
       ],
@@ -55,9 +55,7 @@ const baseConfig = {
 
 module.exports = ({ mode }) => {
   const isProductionMode = mode === 'prod'
-  const envConfig = isProductionMode
-    ? require('./webpack.prod.config')
-    : require('./webpack.dev.config')
+  const envConfig = isProductionMode ? require('./webpack.prod.config') : require('./webpack.dev.config')
 
   return merge(baseConfig, envConfig)
 }

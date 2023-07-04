@@ -12244,7 +12244,7 @@ html {
 
 body {
   margin: 0;
-  background-image: url(../assets/e9e64a4fa694aa9a3713.png);
+  background-image: url(../dist/assets/img/e9e64a4fa694aa9a3713.png);
   background-position: center;
   background-size: cover;
 }
@@ -12450,7 +12450,7 @@ main.finish {
   text-align: center;
 }
 .wrong-block .wrong_container .wrong_image {
-  background-image: url(../assets/eeeaeb9d520a9a6c2260.png);
+  background-image: url(../dist/assets/img/eeeaeb9d520a9a6c2260.png);
   background-size: cover;
   height: 500px;
   width: 320px;
@@ -12464,7 +12464,7 @@ main.finish {
   text-align: center;
 }
 .right-block .right_container .right_image {
-  background-image: url(../assets/ecd796b985d4e451640d.png);
+  background-image: url(../dist/assets/img/ecd796b985d4e451640d.png);
   background-size: cover;
   height: 500px;
   width: 320px;
