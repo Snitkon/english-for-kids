@@ -36,7 +36,7 @@ const baseConfig = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       entry: 'index.js',
-      template: path.resolve(__dirname, 'index.html'),
+      template: path.resolve(__dirname, './src/index.html'),
     }),
     new CopyPlugin({
       patterns: [
