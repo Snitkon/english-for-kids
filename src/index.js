@@ -1,7 +1,5 @@
 import './index.scss'
-import { playGame } from './js/function'
-
-import buildHeaderStructure from './js/header.js'
+import { buildHeaderStructure } from './js/header.js'
 import { mainRenderSubCard, firstRenderCard, buildMainStructure, buildScore } from './js/main.js'
 
 buildHeaderStructure()

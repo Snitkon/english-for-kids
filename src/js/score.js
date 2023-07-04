@@ -1,4 +1,4 @@
-class Score {
+export class Score {
   constructor(data) {
     this.data = data
   }
@@ -88,5 +88,3 @@ class ScoreBlock {
     strInfo.appendChild(dataCorrectPercent)
   }
 }
-
-export default Score

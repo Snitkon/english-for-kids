@@ -1,29 +1,8 @@
-import { Card } from './card'
-import getCards from './data'
-import {
-  active,
-  buildCard,
-  clickCounts,
-  createCard,
-  createScore,
-  createSubCard,
-  gameStart,
-  playGame,
-  resetScore,
-  scoreData,
-  sortScore,
-} from './function'
-import {
-  btn,
-  mainRenderSubCard,
-  playCard,
-  renderGameEnvironment,
-  renderSubCard,
-  rotateSubCard,
-  startGame,
-} from './main'
+import { getCards } from './data'
+import { active, buildCard, clickCounts, createCard, createSubCard, resetScore, scoreData, sortScore } from './function'
+import { mainRenderSubCard } from './main'
 
-function buildHeaderStructure() {
+export function buildHeaderStructure() {
   const body = document.body
   const header = document.createElement('header')
   const container = document.createElement('div')
@@ -158,14 +137,11 @@ export function checkedMode(checked) {
     burger.classList.add('play_mode')
     if (subCardBlockCount > 0) {
       start_btn.classList.add('play_mode')
-      // repeat_btn.classList.add('play_mode')
-      // heart_section.classList.add('play_mode')
-      // gameStart()
     }
   }
 }
 
-async function setNavMenu() {
+export async function setNavMenu() {
   const cards = await getCards()
   const nav_list = document.querySelector('.nav__list')
   const burger = document.querySelector('.menu__burger')
@@ -195,8 +171,7 @@ async function setNavMenu() {
     const resetBtn = document.querySelector('.reset_btn')
     const name = e.target.parentElement.getAttribute('name')
     const id = e.target.parentElement.getAttribute('data-id')
-    const className =
-      e.target.parentElement.classList.contains('nav_list__item')
+    const className = e.target.parentElement.classList.contains('nav_list__item')
     const cardBlock = document.querySelector('.cardsBlock')
     const subCardBlock = document.querySelector('.subCardsBlock')
     const switcher = document.querySelector('.switcher')
@@ -220,16 +195,12 @@ async function setNavMenu() {
         buildCard(subCards, '.subCardsBlock', 'subCard')
         createSubCard(subCards)
         clickCounts()
-        // gameStart()
-        // startGame(id)
       } else if (isSubBlockChildren.length === 0) {
         let checked = (switcher.firstChild.checked = false)
         checkedMode(checked)
         buildCard(subCards, '.subCardsBlock', 'subCard')
         createSubCard(subCards)
         clickCounts()
-        // gameStart()
-        // startGame(id)
       }
       burger.classList.remove('_active')
       nav.classList.remove('_active')
@@ -289,4 +260,3 @@ async function setNavMenu() {
     shadow.classList.toggle('_active')
   })
 }
-export default buildHeaderStructure

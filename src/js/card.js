@@ -14,12 +14,6 @@ export class Card {
     const cardTitle = document.createElement('h2')
     const indicator = document.createElement('div')
 
-    /*     const switcher = document.querySelector('.switcher')
-    const checked = switcher.firstChild.checked
-    if (checked) {
-      card.classList.add(className, 'play_mode')
-    } else {
-    } */
     card.classList.add(className)
     cover.classList.add('card__cover')
     infoContainer.classList.add('card__info_block')
@@ -59,16 +53,11 @@ class RenderCard {
     const card = document.getElementById(this.id)
     const quantityWords = card.querySelector('.info_block__quantity')
 
-    // const switcher = document.querySelector('.switcher')
-    // const checked = switcher.firstChild.checked
-
     card.setAttribute('name', this.cardData.category)
     card.classList.add('card')
-    // card.classList.remove('subCard')
 
     const infoContainer = card.querySelector('.card__info_block')
     const cover = card.querySelector('.card__cover')
-    // const indicator = card.querySelector('.info_block__indicator')
     const rotate = card.querySelector('.rotate')
 
     if (card.querySelector('.info_block__subtitle')) {
@@ -90,10 +79,6 @@ class RenderCard {
       createQuantityWords.innerText = this.cardData.words.length
     }
     rotate && infoContainer.removeChild(rotate)
-
-    /*     if (checked) {
-      indicator.classList.add('play_mode')
-    } */
   }
 }
 
@@ -106,14 +91,8 @@ class RenderSubCard {
   render() {
     const card = document.getElementById(this.id)
 
-    // const switcher = document.querySelector('.switcher')
-    // const checked = switcher.firstChild.checked
-
-    // const rotate = card.querySelector('.rotate')
-
     card.setAttribute('name', this.cardData.word)
     card.classList.add('subCard')
-    // card.classList.remove('card')
 
     const infoContainer = card.querySelector('.card__info_block')
     const cover = card.querySelector('.card__cover')
@@ -122,33 +101,14 @@ class RenderSubCard {
     const cardIndicator = card.querySelector('.info_block__indicator')
     cardTitle.className = 'info_block__subtitle'
 
-    /* if (card.querySelector('.info_block__title')) {
-      const cardTitle = card.querySelector('.info_block__title')
-      cardTitle.className = 'info_block__subtitle'
-      cardTitle.innerText = this.cardData.word
-    }
-    if (card.querySelector('.info_block__subtitle')) {
-      const cardTitle = card.querySelector('.info_block__subtitle')
-      cardTitle.className = 'info_block__subtitle'
-      cardTitle.innerText = this.cardData.word
-    } */
-
     cardTitle.innerText = this.cardData.word
     cover.style.backgroundImage = `url('${this.cardData.image}')`
-    // if (rotate === null) {
     const createRotate = document.createElement('img')
     createRotate.classList.add('rotate')
     createRotate.setAttribute('src', './assets/img/rotate.svg')
     infoContainer.appendChild(createRotate)
-    // }
 
     quantityWords && infoContainer.removeChild(quantityWords)
-
-    /*     if (checked) {
-      cardTitle.classList.add('play_mode')
-      createRotate.classList.add('play_mode')
-      cardIndicator.classList.add('play_mode')
-    } */
   }
 
   rotate() {

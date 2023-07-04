@@ -1,7 +1,7 @@
 import { Card } from './card'
-import getCards from './data'
+import { getCards } from './data'
 import { checkedMode } from './header'
-import Score from './score'
+import { Score } from './score'
 
 export function buildCard(data, selector, className) {
   data.forEach((item, id) => {
@@ -56,8 +56,8 @@ export function active(category, data) {
   })
 }
 
-//For Game
 
+//For Game
 export function gameStart() {
   const startBtn = document.querySelector('.start_btn')
   const repeatBtn = document.querySelector('.repeat_btn')
@@ -105,13 +105,13 @@ export async function playGame(id) {
   const correct = getCorrect ? [...getCorrect] : []
   const error = getError ? [...getError] : []
   let count = 0
-  function a() {
+  let repeat = function () {
     if (arrData.length > 0) {
       const sound = dataWord[0].audioSrc
       playAudio(sound)
     }
   }
-  let b = function (e) {
+  let cardOperation = function (e) {
     if (e.target.closest('.subCard')) {
       let obj = dataWord
       let heart = document.createElement('div')
@@ -144,25 +144,25 @@ export async function playGame(id) {
       }
     }
   }
-  subCardsBlock.addEventListener('click', b)
-  repeat_btn.addEventListener('click', a)
+  subCardsBlock.addEventListener('click', cardOperation)
+  repeat_btn.addEventListener('click', repeat)
   navlist.addEventListener('click', (e) => {
     if (e.target.closest('.nav_list__link')) {
       clearHeartSection()
-      repeat_btn.removeEventListener('click', a)
-      subCardsBlock.removeEventListener('click', b)
+      repeat_btn.removeEventListener('click', repeat)
+      subCardsBlock.removeEventListener('click', cardOperation)
     }
   })
 }
 
-function clearHeartSection() {
+export function clearHeartSection() {
   const section = document.querySelector('.heart_section')
   while (section.firstChild) {
     section.removeChild(section.firstChild)
   }
 }
 
-function removeHeart(count) {
+export function removeHeart(count) {
   const heart = document.querySelectorAll('.heart')
   if (heart.length >= 8) {
     heart[count - 8].style.display = 'none'
@@ -178,7 +178,6 @@ export async function finishGame(correctArr, errorArr) {
   const arrSubBlockCollection = [...isSubBlockChildren]
   const children = heart_section.children
   const arrCollection = [...children]
-  console.log(arrCollection)
   const counts = arrCollection.reduce((previously, current) => {
     previously[current.className] = (previously[current.className] || 0) + 1
     return previously
@@ -225,7 +224,6 @@ export async function finishGame(correctArr, errorArr) {
       buildCard(cards, '.cardsBlock', 'card')
       createCard(cards)
       clearHeartSection()
-      // location.reload()
     }, 3000)
   }
   if (!wrong) {
@@ -248,9 +246,6 @@ export async function finishGame(correctArr, errorArr) {
     container.appendChild(image)
     container.appendChild(perfect)
 
-    const error = localStorage.getItem('error')
-    console.log(error)
-
     perfect.textContent = 'Good job'
     playAudio('./assets/audio/success.mp3')
     setTimeout(() => {
@@ -264,12 +259,11 @@ export async function finishGame(correctArr, errorArr) {
       buildCard(cards, '.cardsBlock', 'card')
       createCard(cards)
       clearHeartSection()
-      // location.reload()
     }, 3000)
   }
 }
 
-function createSeccessData(arr, data) {
+export function createSeccessData(arr, data) {
   if (arr.length > 0) {
     let add = false
     for (let item of arr) {
@@ -287,7 +281,7 @@ function createSeccessData(arr, data) {
   }
 }
 
-function createErrorData(arr, data) {
+export function createErrorData(arr, data) {
   if (arr.length > 0) {
     let add = false
     for (let item of arr) {
@@ -414,7 +408,7 @@ export function sortScore() {
   })
 }
 
-function sortTable(columnIndex, sortDirection) {
+export function sortTable(columnIndex, sortDirection) {
   let rows, i, x, y, shouldSwitch
   const table = document.querySelector('.score_container')
   let switching = true
@@ -459,7 +453,7 @@ function sortTable(columnIndex, sortDirection) {
   }
 }
 
-function getValueForSorting(value) {
+export function getValueForSorting(value) {
   const numberRegex = /^-?\d+(?:\.\d+)?$/
   const percentageRegex = /^-?\d+(?:\.\d+)?%$/
 
