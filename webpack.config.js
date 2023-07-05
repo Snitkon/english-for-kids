@@ -18,7 +18,7 @@ const baseConfig = {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: { publicPath: '../dist/assets/img/' },
+            options: { publicPath: './assets/img/' },
           },
           'css-loader',
           { loader: 'sass-loader', options: { sourceMap: true } },
