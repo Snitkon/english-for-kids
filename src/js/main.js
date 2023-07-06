@@ -1,5 +1,5 @@
 import { getCards } from './data';
-import { active, buildCard, clickCounts, renderCategories, createScore, renderWords, createElement } from './function';
+import { active, createCard, clickCounts, renderCategories, createScore, renderWords, createElement } from './function';
 import { checkedMode } from './header';
 
 export function buildMainStructure() {
@@ -30,7 +30,7 @@ export async function buildScore() {
 
 export async function firstRenderCard() {
   const cards = await getCards();
-  buildCard(cards, '.cardsBlock', 'card');
+  createCard(cards, '.cardsBlock', 'card');
   renderCategories(cards);
 }
 
@@ -55,7 +55,7 @@ export async function mainRenderSubCard() {
         checkedMode(checked);
         const renderElement = element.words;
         active(name, '.nav_list__item');
-        buildCard(cards, '.subCardsBlock', 'subCard');
+        createCard(cards, '.subCardsBlock', 'subCard');
         renderWords(renderElement);
         clickCounts();
       }
