@@ -44,6 +44,7 @@ export async function mainRenderSubCard() {
   arrCollection.forEach((item) => {
     item.addEventListener('click', (e) => {
       const card = e.currentTarget;
+      console.log(card)
       const id = card.getAttribute('id');
       const name = card.getAttribute('name');
       const element = cards.find((item) => item.category === name);
@@ -58,15 +59,6 @@ export async function mainRenderSubCard() {
         createCard(cards, '.subCardsBlock', 'subCard');
         renderWords(renderElement);
         clickCounts();
-      }
-    });
-    item.addEventListener('mouseleave', (e) => {
-      const card = e.currentTarget;
-      if (card.classList.contains('_rotate')) {
-        const name = card.getAttribute('name');
-        card.classList.remove('_rotate');
-        const title = card.lastElementChild.firstElementChild;
-        title.textContent = name;
       }
     });
   });
