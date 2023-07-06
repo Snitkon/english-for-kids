@@ -16,10 +16,10 @@ export function createElement(tag, classNames, attr, value) {
   return element;
 }
 
-export function buildCard(data, selector, className) {
+export function createCard(data, selector, className) {
   data.forEach((item, id) => {
     const card = new Card(id, item);
-    card.buildCardContainer(selector, className);
+    card.createCardContainer(selector, className);
   });
 }
 
@@ -43,11 +43,6 @@ export function createScore(data) {
   score.buildScoreContainer('main');
   score.renderScore();
 }
-
-/* export function id(data) {
-  let id = (data + 1) * 8
-  return id
-} */
 
 export function playAudio(url) {
   const audio = new Audio(url);
@@ -137,7 +132,7 @@ export async function playGame(id) {
         heart.classList.add('right');
         heart_section.appendChild(heart);
         playAudio('./assets/audio/correct.mp3');
-        createSeccessData(correct, word);
+        generateDataArray(correct, word);
         removeHeart(count);
         if (arrData.length > 0) {
           setTimeout(() => {
@@ -151,7 +146,7 @@ export async function playGame(id) {
         heart.classList.add('wrong');
         heart_section.appendChild(heart);
         playAudio('./assets/audio/error.mp3');
-        createErrorData(error, word);
+        generateDataArray(error, word);
         removeHeart(count);
       }
     }
@@ -176,8 +171,9 @@ export function clearHeartSection() {
 
 export function removeHeart(count) {
   const heart = document.querySelectorAll('.heart');
-  if (heart.length >= 8) {
-    heart[count - 8].style.display = 'none';
+  const max_count = 8;
+  if (heart.length >= max_count) {
+    heart[count - max_count].style.display = 'none';
   }
 }
 
@@ -222,14 +218,14 @@ export async function finishGame(correctArr, errorArr) {
     mistakes.textContent = `Mistakes: ${wrong}`;
     playAudio('./assets/audio/failure.mp3');
     setTimeout(() => {
-      body.removeChild(wrongBlock);
+      body.removeChild(wrong_block);
       main.classList.toggle('finish');
       let checked = (switcher.firstChild.checked = false);
       checkedMode(checked);
       arrSubBlockCollection.forEach((item) => {
         subCardBlock.removeChild(item);
       });
-      buildCard(cards, '.cardsBlock', 'card');
+      createCard(cards, '.cardsBlock', 'card');
       renderCategories(cards);
       clearHeartSection();
     }, 3000);
@@ -262,14 +258,14 @@ export async function finishGame(correctArr, errorArr) {
         subCardBlock.removeChild(item);
       });
       clearHeartSection();
-      buildCard(cards, '.cardsBlock', 'card');
+      createCard(cards, '.cardsBlock', 'card');
       renderCategories(cards);
     }, 3000);
   }
 }
 
-export function createSeccessData(arr, data) {
-  if (arr.length > 0) {
+export function generateDataArray(arr, data) {
+  if (arr.length) {
     let add = false;
     for (let item of arr) {
       if (item[0] === data) {
@@ -277,29 +273,11 @@ export function createSeccessData(arr, data) {
         add = true;
       }
     }
-    if (add === false) {
+    if (!add) {
       arr.push([data, 1]);
     }
   }
-  if (arr.length === 0) {
-    arr.push([data, 1]);
-  }
-}
-
-export function createErrorData(arr, data) {
-  if (arr.length > 0) {
-    let add = false;
-    for (let item of arr) {
-      if (item[0] === data) {
-        ++item[1];
-        add = true;
-      }
-    }
-    if (add === false) {
-      arr.push([data, 1]);
-    }
-  }
-  if (arr.length === 0) {
+  if (!arr.length) {
     arr.push([data, 1]);
   }
 }
@@ -315,7 +293,7 @@ export function clickCounts() {
       if (card.className === 'subCard') {
         const getClick = JSON.parse(localStorage.getItem('click'));
         const click = getClick ? [...getClick] : [];
-        if (click.length > 0) {
+        if (click.length) {
           let find = false;
           for (let item of click) {
             if (item[0] === name) {
@@ -323,11 +301,11 @@ export function clickCounts() {
               find = true;
             }
           }
-          if (find === false) {
+          if (!find) {
             click.push([name, 1]);
           }
         }
-        if (click.length === 0) {
+        if (!click.length) {
           click.push([name, 1]);
         }
         const clickJson = JSON.stringify(click);

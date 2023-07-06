@@ -1,7 +1,7 @@
 import { getCards } from './data';
 import {
   active,
-  buildCard,
+  createCard,
   clickCounts,
   renderCategories,
   renderWords,
@@ -183,14 +183,14 @@ export async function setNavMenu() {
         });
         let checked = (switcher.firstChild.checked = false);
         checkedMode(checked);
-        buildCard(subCards, '.subCardsBlock', 'subCard');
+        createCard(subCards, '.subCardsBlock', 'subCard');
         renderWords(subCards);
         clickCounts();
       }
       if (isSubBlockChildren.length === 0) {
         let checked = (switcher.firstChild.checked = false);
         checkedMode(checked);
-        buildCard(subCards, '.subCardsBlock', 'subCard');
+        createCard(subCards, '.subCardsBlock', 'subCard');
         renderWords(subCards);
         clickCounts();
       }
@@ -217,13 +217,13 @@ export async function setNavMenu() {
         });
         let checked = (switcher.firstChild.checked = false);
         checkedMode(checked);
-        buildCard(cards, '.cardsBlock', 'card');
+        createCard(cards, '.cardsBlock', 'card');
         renderCategories(cards);
       }
       if (isBlockChildren.length === 0) {
         let checked = (switcher.firstChild.checked = false);
         checkedMode(checked);
-        buildCard(cards, '.cardsBlock', 'card');
+        createCard(cards, '.cardsBlock', 'card');
         renderCategories(cards);
       }
       mainRenderSubCard();
