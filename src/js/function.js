@@ -1,6 +1,7 @@
 import { Card } from './card';
 import { getCards } from './data';
 import { checkedMode } from './header';
+import { firstRenderCard, mainRenderSubCard } from './main';
 import { Score } from './score';
 
 export function createElement(tag, classNames, attr, value) {
@@ -177,8 +178,7 @@ export function removeHeart(count) {
   }
 }
 
-export async function finishGame(correctArr, errorArr) {
-  const cards = await getCards();
+export function finishGame(correctArr, errorArr) {
   const switcher = document.querySelector('.switcher');
   const heart_section = document.querySelector('.heart_section');
   const subCardBlock = document.querySelector('.subCardsBlock');
@@ -225,8 +225,8 @@ export async function finishGame(correctArr, errorArr) {
       arrSubBlockCollection.forEach((item) => {
         subCardBlock.removeChild(item);
       });
-      createCard(cards, '.cardsBlock', 'card');
-      renderCategories(cards);
+      firstRenderCard();
+      mainRenderSubCard();
       clearHeartSection();
     }, 3000);
   }
@@ -258,8 +258,8 @@ export async function finishGame(correctArr, errorArr) {
         subCardBlock.removeChild(item);
       });
       clearHeartSection();
-      createCard(cards, '.cardsBlock', 'card');
-      renderCategories(cards);
+      firstRenderCard();
+      mainRenderSubCard();
     }, 3000);
   }
 }
