@@ -1,5 +1,5 @@
 import { getCards } from './data';
-import { active, createCard, clickCounts, renderCategories, createScore, renderWords, createElement } from './function';
+import { activeCategory, createCard, clickCounts, renderCategories, createScore, renderWords, createElement } from './function';
 import { checkedMode } from './header';
 
 export function buildMainStructure() {
@@ -54,7 +54,7 @@ export async function mainRenderSubCard() {
         let checked = (switcher.firstChild.checked = false);
         checkedMode(checked);
         const renderElement = element.words;
-        active(name, '.nav_list__item');
+        activeCategory(name, '.nav_list__item');
         createCard(cards, '.subCardsBlock', 'subCard');
         renderWords(renderElement);
         clickCounts();

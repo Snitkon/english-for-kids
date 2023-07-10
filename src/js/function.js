@@ -50,7 +50,7 @@ export function playAudio(url) {
   audio.play();
 }
 
-export function active(category, data) {
+export function activeCategory(category, data) {
   const getCollection = document.querySelectorAll(data);
   getCollection.forEach((item) => {
     const name = item.getAttribute('name');
@@ -88,7 +88,7 @@ export function gameStart() {
   navlist.addEventListener('click', (e) => {
     if (e.target.closest('.nav_list__link')) {
       clearHeartSection();
-      startBtn.removeEventListener('click', c);
+      // startBtn.removeEventListener('click', c);
     }
   });
 }
@@ -103,7 +103,7 @@ export function getSound(data) {
 }
 
 function processCardOperation(e, heart_section, dataWord, arrData, correct, error, count) {
-  if (e.target.closest('.subCard')) {
+  if (e.currentTarget) {
     let totalizer = count;
     let obj = dataWord;
     let heart = document.createElement('div');
@@ -125,7 +125,7 @@ function processCardOperation(e, heart_section, dataWord, arrData, correct, erro
       }
       if (!arrData.length) {
         finishGame(correct, error);
-        return undefined;
+        return;
       }
     } else {
       ++totalizer;
@@ -137,6 +137,7 @@ function processCardOperation(e, heart_section, dataWord, arrData, correct, erro
       return [dataWord, totalizer];
     }
   }
+  return;
 }
 
 function repeatWordSound(arrData, dataWord) {
@@ -148,7 +149,7 @@ function repeatWordSound(arrData, dataWord) {
 }
 
 export async function playGame(id) {
-  const subCardsBlock = document.querySelector('.subCardsBlock');
+  const subCards = document.querySelectorAll('.subCard');
   const repeat_btn = document.querySelector('.repeat_btn');
   const heart_section = document.querySelector('.heart_section');
   const navlist = document.querySelector('.nav__list');
@@ -157,7 +158,6 @@ export async function playGame(id) {
   const arrayWord = data[id].words;
   const arrData = arrayWord;
   let dataWord = getSound(arrData);
-  console.log(dataWord);
   const getCorrect = JSON.parse(localStorage.getItem('correct'));
   const getError = JSON.parse(localStorage.getItem('error'));
   const correct = getCorrect ? [...getCorrect] : [];
@@ -176,28 +176,35 @@ export async function playGame(id) {
       count = totalizer;
     }
     if (newData === undefined) {
-      subCardsBlock.removeEventListener('click', eventHandlerForCard);
+      subCards.forEach((subCard) => {
+        subCard.removeEventListener('click', eventHandlerForCard);
+      });
       repeat_btn.removeEventListener('click', eventHandlerForSound);
     }
     return;
   };
 
-  subCardsBlock.addEventListener('click', eventHandlerForCard);
+  subCards.forEach((subCard) => {
+    subCard.addEventListener('click', eventHandlerForCard);
+  });
   repeat_btn.addEventListener('click', eventHandlerForSound);
   navlist.addEventListener('click', (e) => {
     if (e.target.closest('.nav_list__link')) {
       clearHeartSection();
       repeat_btn.removeEventListener('click', eventHandlerForSound);
-      subCardsBlock.removeEventListener('click', eventHandlerForCard);
+      subCards.forEach((subCard) => {
+        subCard.removeEventListener('click', eventHandlerForCard);
+      });
     }
   });
 }
 
 export function clearHeartSection() {
   const section = document.querySelector('.heart_section');
-  while (section.firstChild) {
+  section.innerHTML = '';
+  /*   while (section.firstChild) {
     section.removeChild(section.firstChild);
-  }
+  } */
 }
 
 export function removeHeart(count) {
@@ -260,6 +267,7 @@ export function finishGame(correctArr, errorArr) {
       firstRenderCard();
       mainRenderSubCard();
       clearHeartSection();
+      activeCategory('Main Page', '.nav_list__item');
     }, 3000);
   }
 
@@ -293,6 +301,7 @@ export function finishGame(correctArr, errorArr) {
       clearHeartSection();
       firstRenderCard();
       mainRenderSubCard();
+      activeCategory('Main Page', '.nav_list__item');
     }, 3000);
   }
 }
@@ -396,32 +405,56 @@ export function sortScore() {
   const row = table.rows;
   const header = row[0];
   let sortOrder = 'asc';
-  header.addEventListener('click', (e) => {
+  let clickHandler = false;
+
+  function sort(e) {
     const target = e.target;
+
     if (sortOrder === 'asc') {
       sortOrder = 'desc';
     } else {
       sortOrder = 'asc';
     }
-    if (target.closest('.english')) {
-      sortTable(0, sortOrder);
+
+    switch (target) {
+      case target.closest('.english'):
+        sortTable(0, sortOrder);
+        break;
+      case target.closest('.russian'):
+        sortTable(1, sortOrder);
+        break;
+      case target.closest('.click'):
+        sortTable(2, sortOrder);
+        break;
+      case target.closest('.correct'):
+        sortTable(3, sortOrder);
+        break;
+      case target.closest('.error'):
+        sortTable(4, sortOrder);
+        break;
+      case target.closest('.percent'):
+        sortTable(5, sortOrder);
+        break;
+      default:
+        return;
     }
-    if (target.closest('.russian')) {
-      sortTable(1, sortOrder);
-    }
-    if (target.closest('.click')) {
-      sortTable(2, sortOrder);
-    }
-    if (target.closest('.correct')) {
-      sortTable(3, sortOrder);
-    }
-    if (target.closest('.error')) {
-      sortTable(4, sortOrder);
-    }
-    if (target.closest('.percent')) {
-      sortTable(5, sortOrder);
-    }
-  });
+  }
+
+  function addListener() {
+    header.addEventListener('click', sort);
+    clickHandler = true
+  }
+
+  function removeListener() {
+    header.removeEventListener('click', sort);
+    clickHandler = false
+  }
+
+  return {
+    add: addListener,
+    remove: removeListener,
+    isActive: clickHandler
+  };
 }
 
 export function sortTable(columnIndex, sortDirection) {
