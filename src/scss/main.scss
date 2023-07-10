@@ -1,0 +1,215 @@
+* {
+  margin: 0;
+}
+
+html {
+  line-height: 1.15;
+}
+
+body {
+  margin: 0;
+  background-image: url('./assets/img/background.png');
+  background-position: center;
+  background-size: cover;
+}
+
+main {
+  padding: 0 60px;
+
+  &.finish {
+    display: none;
+  }
+}
+
+.section {
+  display: none;
+  
+   &._active {
+    display: block;
+  }
+  .cardsBlock,
+  .subCardsBlock {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+
+    .card,
+    .subCard {
+      @media screen and (max-width: 2500px) {
+        width: calc(100% / 4 - 30px);
+        margin-bottom: 20px;
+      }
+
+      @media screen and (max-width: 1280px) {
+        width: calc(100% / 3 - 25px);
+        margin-bottom: 20px;
+      }
+
+      @media screen and (max-width: 1100px) {
+        width: calc(100% / 2 - 25px);
+        margin-bottom: 20px;
+      }
+
+      @media screen and (max-width: 650px) {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      width: 100%;
+      height: 100%;
+      box-shadow: 1px 3px 4px rgba(0, 0, 0, 0.05);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.5s all;
+
+      &:hover {
+        box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.25);
+      }
+
+      &._rotate {
+        transform: rotate3d(1, 1, 1, 360deg);
+      }
+
+      .card__cover {
+        background-position: center;
+        background-size: cover;
+        height: 200px;
+        border-radius: 10px 10px 0 0;
+      }
+
+      .card__info_block {
+        min-height: 40px;
+        position: relative;
+        display: flex;
+        background-color: #a8ced2;
+        flex-direction: column;
+        padding: 10px 20px;
+        gap: 5px;
+        border-radius: 0 0 10px 10px;
+
+        .info_block__subtitle {
+          &.play_mode {
+            display: none;
+          }
+        }
+
+        .info_block__indicator {
+          position: absolute;
+          right: 20px;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background-color: $color-train;
+          transition: all 0.5s;
+
+          &.play_mode {
+            background-color: $color-play;
+
+            &::after {
+              border: 1px solid $color-play;
+            }
+          }
+
+          &::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 1px solid $color-train;
+            top: -5px;
+            left: -5px;
+          }
+        }
+        .rotate {
+          width: 30px;
+          height: 30px;
+
+          &.play_mode {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  .start_btn,
+  .repeat_btn {
+    display: none;
+    margin-right: 70%;
+    width: 100px;
+    height: 35px;
+  }
+
+  .heart_section {
+    display: none;
+  }
+
+  .start_btn,
+  .repeat_btn,
+  .heart_section {
+    &.play_mode {
+      display: inline-block;
+    }
+  }
+}
+
+.subCard {
+  &.passed {
+    opacity: 0.3;
+    box-shadow: none;
+    pointer-events: none;
+  }
+}
+
+.right,
+.wrong {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.right {
+  background-color: red;
+}
+
+.wrong {
+  background-color: gray;
+}
+
+.wrong-block {
+  .wrong_container {
+    text-align: center;
+    .wrong_image {
+      background-image: url('./assets/img/failureMy.png');
+      background-size: cover;
+      height: 500px;
+      width: 320px;
+      margin: auto;
+    }
+
+    .wrong_mistakes {
+      font-size: 30px;
+    }
+  }
+}
+
+.right-block {
+  .right_container {
+    text-align: center;
+    .right_image {
+      background-image: url('./assets/img/successMy.png');
+      background-size: cover;
+      height: 500px;
+      width: 320px;
+      margin: auto;
+    }
+
+    .right_perfect {
+      font-size: 30px;
+    }
+  }
+}
