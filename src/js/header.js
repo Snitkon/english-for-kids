@@ -1,6 +1,6 @@
 import { getCards } from './data';
 import {
-  active,
+  activeCategory,
   createCard,
   clickCounts,
   renderCategories,
@@ -104,7 +104,7 @@ export function checkedMode(checked) {
 
   const subCardBlockCount = subCardBlock.children.length;
 
-  if (checked === false) {
+  if (!checked) {
     label.textContent = 'Train';
     cardIndicator.forEach((item) => item.classList.remove('play_mode'));
     cardTitle.forEach((item) => item.classList.remove('play_mode'));
@@ -117,7 +117,7 @@ export function checkedMode(checked) {
     repeat_btn.classList.remove('play_mode');
     heart_section.classList.remove('play_mode');
   }
-  if (checked === true) {
+  if (checked) {
     label.textContent = 'Play';
     subCard.forEach((item) => item.classList.add('play_mode'));
     cardIndicator.forEach((item) => item.classList.add('play_mode'));
@@ -157,6 +157,7 @@ export async function setNavMenu() {
   });
 
   nav_list.addEventListener('click', (e) => {
+    const sortData = sortScore();
     const section = document.querySelector('.section');
     const table = document.querySelector('.score_container');
     const resetBtn = document.querySelector('.reset_btn');
@@ -186,6 +187,7 @@ export async function setNavMenu() {
         createCard(subCards, '.subCardsBlock', 'subCard');
         renderWords(subCards);
         clickCounts();
+        sortData.remove();
       }
       if (isSubBlockChildren.length === 0) {
         let checked = (switcher.firstChild.checked = false);
@@ -193,6 +195,7 @@ export async function setNavMenu() {
         createCard(subCards, '.subCardsBlock', 'subCard');
         renderWords(subCards);
         clickCounts();
+        sortData.remove();
       }
       burger.classList.remove('_active');
       nav.classList.remove('_active');
@@ -201,7 +204,7 @@ export async function setNavMenu() {
       resetBtn.classList.remove('_active');
       table.classList.remove('_active');
       section.classList.add('_active');
-      active(name, '.nav_list__item');
+      activeCategory(name, '.nav_list__item');
     }
     if (name === 'Main Page' && className) {
       const isSubBlockChildren = subCardBlock.children;
@@ -219,12 +222,14 @@ export async function setNavMenu() {
         checkedMode(checked);
         createCard(cards, '.cardsBlock', 'card');
         renderCategories(cards);
+        sortData.remove();
       }
       if (isBlockChildren.length === 0) {
         let checked = (switcher.firstChild.checked = false);
         checkedMode(checked);
         createCard(cards, '.cardsBlock', 'card');
         renderCategories(cards);
+        sortData.remove();
       }
       mainRenderSubCard();
       burger.classList.remove('_active');
@@ -234,9 +239,11 @@ export async function setNavMenu() {
       resetBtn.classList.remove('_active');
       table.classList.remove('_active');
       section.classList.add('_active');
-      active(name, '.nav_list__item');
+      activeCategory(name, '.nav_list__item');
     }
     if (name === 'Score' && className) {
+      let checked = (switcher.firstChild.checked = false);
+      checkedMode(checked);
       burger.classList.remove('_active');
       nav.classList.remove('_active');
       body.classList.remove('_active');
@@ -244,10 +251,10 @@ export async function setNavMenu() {
       section.classList.remove('_active');
       resetBtn.classList.add('_active');
       table.classList.add('_active');
-      active(name, '.nav_list__item');
+      activeCategory(name, '.nav_list__item');
       scoreData();
       resetScore();
-      sortScore();
+      sortData.add();
     }
   });
 

@@ -50,7 +50,7 @@ export function playAudio(url) {
   audio.play();
 }
 
-export function active(category, data) {
+export function activeCategory(category, data) {
   const getCollection = document.querySelectorAll(data);
   getCollection.forEach((item) => {
     const name = item.getAttribute('name');
@@ -66,25 +66,29 @@ export function active(category, data) {
 }
 
 //For Game
-export function gameStart() {
+
+function c(e) {
   const startBtn = document.querySelector('.start_btn');
   const repeatBtn = document.querySelector('.repeat_btn');
+  startBtn.classList.remove('play_mode');
+  repeatBtn.classList.add('play_mode');
   const navlist = document.querySelector('.nav__list');
-  let c = function (e) {
-    startBtn.classList.remove('play_mode');
-    repeatBtn.classList.add('play_mode');
-    const navlist = document.querySelector('.nav__list');
-    const children = navlist.children;
-    const arrElement = [...children];
-    const element = arrElement.find((item) => item.className === 'nav_list__item _active');
-    const id = element.getAttribute('data-id');
-    playGame(id);
-  };
+  const children = navlist.children;
+  const arrElement = [...children];
+  const element = arrElement.find((item) => item.className === 'nav_list__item _active');
+  const id = element.getAttribute('data-id');
+  playGame(id);
+}
+
+export function gameStart() {
+  const startBtn = document.querySelector('.start_btn');
+  const navlist = document.querySelector('.nav__list');
+
   startBtn.addEventListener('click', c);
   navlist.addEventListener('click', (e) => {
     if (e.target.closest('.nav_list__link')) {
       clearHeartSection();
-      startBtn.removeEventListener('click', c);
+      // startBtn.removeEventListener('click', c);
     }
   });
 }
@@ -95,17 +99,63 @@ export function getSound(data) {
   let objWord = arr.splice(randomNumber, 1);
   let audio = objWord[0].audioSrc;
   playAudio(audio);
-  return objWord;
+  return objWord[0];
+}
+
+function processCardOperation(e, heart_section, dataWord, arrData, correct, error, count) {
+  if (e.currentTarget) {
+    let totalizer = count;
+    let obj = dataWord;
+    let heart = document.createElement('div');
+    heart.classList.add('heart');
+    let subCard = e.target.parentElement;
+    let subCardName = subCard.getAttribute('name');
+    let word = obj.word;
+    if (subCardName === word) {
+      ++totalizer;
+      subCard.classList.add('passed');
+      heart.classList.add('right');
+      heart_section.appendChild(heart);
+      playAudio('./assets/audio/correct.mp3');
+      generateDataArray(correct, word);
+      removeHeart(totalizer);
+      if (arrData.length) {
+        const dataWord = getSound(arrData);
+        return [dataWord, totalizer];
+      }
+      if (!arrData.length) {
+        finishGame(correct, error);
+        return;
+      }
+    } else {
+      ++totalizer;
+      heart.classList.add('wrong');
+      heart_section.appendChild(heart);
+      playAudio('./assets/audio/error.mp3');
+      generateDataArray(error, word);
+      removeHeart(totalizer);
+      return [dataWord, totalizer];
+    }
+  }
+  return;
+}
+
+function repeatWordSound(arrData, dataWord) {
+  console.log(dataWord);
+  if (arrData.length >= 0) {
+    const sound = dataWord.audioSrc;
+    playAudio(sound);
+  }
 }
 
 export async function playGame(id) {
-  const data = await getCards();
-  const arrayWord = data[id].words;
-  const subCardsBlock = document.querySelector('.subCardsBlock');
+  const subCards = document.querySelectorAll('.subCard');
   const repeat_btn = document.querySelector('.repeat_btn');
   const heart_section = document.querySelector('.heart_section');
   const navlist = document.querySelector('.nav__list');
   heart_section.classList.add('play_mode');
+  const data = await getCards();
+  const arrayWord = data[id].words;
   const arrData = arrayWord;
   let dataWord = getSound(arrData);
   const getCorrect = JSON.parse(localStorage.getItem('correct'));
@@ -113,61 +163,48 @@ export async function playGame(id) {
   const correct = getCorrect ? [...getCorrect] : [];
   const error = getError ? [...getError] : [];
   let count = 0;
-  let repeat = function () {
-    if (arrData.length > 0) {
-      const sound = dataWord[0].audioSrc;
-      playAudio(sound);
-    }
+
+  const eventHandlerForSound = function () {
+    repeatWordSound(arrData, dataWord);
   };
-  let cardOperation = function (e) {
-    if (e.target.closest('.subCard')) {
-      let obj = dataWord;
-      let heart = document.createElement('div');
-      heart.classList.add('heart');
-      let subCard = e.target.parentElement;
-      let subCardName = subCard.getAttribute('name');
-      let word = obj[0].word;
-      if (subCardName === word) {
-        ++count;
-        subCard.classList.add('passed');
-        heart.classList.add('right');
-        heart_section.appendChild(heart);
-        playAudio('./assets/audio/correct.mp3');
-        generateDataArray(correct, word);
-        removeHeart(count);
-        if (arrData.length > 0) {
-          setTimeout(() => {
-            dataWord = getSound(arrData);
-          }, 500);
-        } else {
-          finishGame(correct, error);
-        }
-      } else {
-        ++count;
-        heart.classList.add('wrong');
-        heart_section.appendChild(heart);
-        playAudio('./assets/audio/error.mp3');
-        generateDataArray(error, word);
-        removeHeart(count);
-      }
+
+  const eventHandlerForCard = function (e) {
+    const newData = processCardOperation(e, heart_section, dataWord, arrData, correct, error, count);
+    if (newData != undefined) {
+      let [dataWordNew, totalizer] = newData;
+      dataWord = dataWordNew;
+      count = totalizer;
     }
+    if (newData === undefined) {
+      subCards.forEach((subCard) => {
+        subCard.removeEventListener('click', eventHandlerForCard);
+      });
+      repeat_btn.removeEventListener('click', eventHandlerForSound);
+    }
+    return;
   };
-  subCardsBlock.addEventListener('click', cardOperation);
-  repeat_btn.addEventListener('click', repeat);
+
+  subCards.forEach((subCard) => {
+    subCard.addEventListener('click', eventHandlerForCard);
+  });
+  repeat_btn.addEventListener('click', eventHandlerForSound);
   navlist.addEventListener('click', (e) => {
     if (e.target.closest('.nav_list__link')) {
       clearHeartSection();
-      repeat_btn.removeEventListener('click', repeat);
-      subCardsBlock.removeEventListener('click', cardOperation);
+      repeat_btn.removeEventListener('click', eventHandlerForSound);
+      subCards.forEach((subCard) => {
+        subCard.removeEventListener('click', eventHandlerForCard);
+      });
     }
   });
 }
 
 export function clearHeartSection() {
   const section = document.querySelector('.heart_section');
-  while (section.firstChild) {
+  section.innerHTML = '';
+  /*   while (section.firstChild) {
     section.removeChild(section.firstChild);
-  }
+  } */
 }
 
 export function removeHeart(count) {
@@ -179,6 +216,7 @@ export function removeHeart(count) {
 }
 
 export function finishGame(correctArr, errorArr) {
+  const startBtn = document.querySelector('.start_btn');
   const switcher = document.querySelector('.switcher');
   const heart_section = document.querySelector('.heart_section');
   const subCardBlock = document.querySelector('.subCardsBlock');
@@ -225,9 +263,11 @@ export function finishGame(correctArr, errorArr) {
       arrSubBlockCollection.forEach((item) => {
         subCardBlock.removeChild(item);
       });
+      startBtn.removeEventListener('click', c);
       firstRenderCard();
       mainRenderSubCard();
       clearHeartSection();
+      activeCategory('Main Page', '.nav_list__item');
     }, 3000);
   }
 
@@ -257,9 +297,11 @@ export function finishGame(correctArr, errorArr) {
       arrSubBlockCollection.forEach((item) => {
         subCardBlock.removeChild(item);
       });
+      startBtn.removeEventListener('click', c);
       clearHeartSection();
       firstRenderCard();
       mainRenderSubCard();
+      activeCategory('Main Page', '.nav_list__item');
     }, 3000);
   }
 }
@@ -363,32 +405,56 @@ export function sortScore() {
   const row = table.rows;
   const header = row[0];
   let sortOrder = 'asc';
-  header.addEventListener('click', (e) => {
+  let clickHandler = false;
+
+  function sort(e) {
     const target = e.target;
+
     if (sortOrder === 'asc') {
       sortOrder = 'desc';
     } else {
       sortOrder = 'asc';
     }
-    if (target.closest('.english')) {
-      sortTable(0, sortOrder);
+
+    switch (target) {
+      case target.closest('.english'):
+        sortTable(0, sortOrder);
+        break;
+      case target.closest('.russian'):
+        sortTable(1, sortOrder);
+        break;
+      case target.closest('.click'):
+        sortTable(2, sortOrder);
+        break;
+      case target.closest('.correct'):
+        sortTable(3, sortOrder);
+        break;
+      case target.closest('.error'):
+        sortTable(4, sortOrder);
+        break;
+      case target.closest('.percent'):
+        sortTable(5, sortOrder);
+        break;
+      default:
+        return;
     }
-    if (target.closest('.russian')) {
-      sortTable(1, sortOrder);
-    }
-    if (target.closest('.click')) {
-      sortTable(2, sortOrder);
-    }
-    if (target.closest('.correct')) {
-      sortTable(3, sortOrder);
-    }
-    if (target.closest('.error')) {
-      sortTable(4, sortOrder);
-    }
-    if (target.closest('.percent')) {
-      sortTable(5, sortOrder);
-    }
-  });
+  }
+
+  function addListener() {
+    header.addEventListener('click', sort);
+    clickHandler = true
+  }
+
+  function removeListener() {
+    header.removeEventListener('click', sort);
+    clickHandler = false
+  }
+
+  return {
+    add: addListener,
+    remove: removeListener,
+    isActive: clickHandler
+  };
 }
 
 export function sortTable(columnIndex, sortDirection) {
