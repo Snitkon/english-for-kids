@@ -44,7 +44,6 @@ export async function mainRenderSubCard() {
   arrCollection.forEach((item) => {
     item.addEventListener('click', (e) => {
       const card = e.currentTarget;
-      console.log(card)
       const id = card.getAttribute('id');
       const name = card.getAttribute('name');
       const element = cards.find((item) => item.category === name);

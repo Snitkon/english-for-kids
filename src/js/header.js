@@ -104,7 +104,7 @@ export function checkedMode(checked) {
 
   const subCardBlockCount = subCardBlock.children.length;
 
-  if (checked === false) {
+  if (!checked) {
     label.textContent = 'Train';
     cardIndicator.forEach((item) => item.classList.remove('play_mode'));
     cardTitle.forEach((item) => item.classList.remove('play_mode'));
@@ -117,7 +117,7 @@ export function checkedMode(checked) {
     repeat_btn.classList.remove('play_mode');
     heart_section.classList.remove('play_mode');
   }
-  if (checked === true) {
+  if (checked) {
     label.textContent = 'Play';
     subCard.forEach((item) => item.classList.add('play_mode'));
     cardIndicator.forEach((item) => item.classList.add('play_mode'));
